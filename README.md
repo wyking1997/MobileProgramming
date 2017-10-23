@@ -29,4 +29,4 @@ c(select film) => d
 c(show_cinemas_on_map clicked) => go to google maps
 d(rate_button clicked)  => e
 d(back_button clicked) => c
-e(film rated || back button clicked) => d 
+e(film rated || back button clicked) => d
