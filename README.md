@@ -1,5 +1,10 @@
 # MobileProgramming
 
+I need an application witch will help me to manage the films from the cinemas from cluj napoca. I want people to be see
+all the cinemas in one place, and also to search for different films and see specifics about each of them.
+All the people witch will use the application will need to have an account and based on their account, i want them
+to be able to rate the films. Knowing somehow the popularity of each cinema would also be very nice!
+
 The application will manage the cinemas from Cluj Napoca and will have the following functionalities:
 	-> search films
 	-> display a chart showing the number of sold tickets for each cinemas in the last week
