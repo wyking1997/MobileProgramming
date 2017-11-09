@@ -13,13 +13,23 @@ public class Movie implements Serializable {
     private int year;
     private String title;
     private int duration;
+    private String description;
     private int id;
 
-    public Movie(int year, String title, int duration) {
+    public Movie(int year, String title, int duration, String description) {
         this.year = year;
         this.title = title;
         this.duration = duration;
+        this.description = description;
         id = COUNTER++;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -78,6 +88,10 @@ public class Movie implements Serializable {
                 ", title='" + title + '\'' +
                 ", duration=" + duration +
                 '}';
+    }
+
+    public String getListItemRepresentation(){
+        return this.title + " " + this.year + "\n" + this.duration + " minutes";
     }
 }
 

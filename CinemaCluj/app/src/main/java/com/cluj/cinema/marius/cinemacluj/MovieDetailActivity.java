@@ -1,11 +1,8 @@
 package com.cluj.cinema.marius.cinemacluj;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.IntegerRes;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
@@ -14,13 +11,14 @@ import com.cluj.cinema.marius.cinemacluj.model.Movie;
 public class MovieDetailActivity extends AppCompatActivity {
 
     private Movie movie;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
-        int position = getIntent().getIntExtra(MovieListActivity.EXTRA_MOVIE_POSITION_IN_LIST, -1);
+        position = getIntent().getIntExtra(MovieListActivity.EXTRA_MOVIE_POSITION_IN_LIST, -1);
         movie = MovieListActivity.MOVIES.get(position);
 
         EditText titleText = (EditText) findViewById(R.id.titleText);
@@ -36,30 +34,40 @@ public class MovieDetailActivity extends AppCompatActivity {
         EditText titleText = (EditText) findViewById(R.id.titleText);
         EditText yearText = (EditText) findViewById(R.id.yearText);
         EditText durationText = (EditText) findViewById(R.id.durationText);
+        String yearAsString = "" + yearText.getText();
+        String durationAsString = "" + durationText.getText();
 
         boolean flag = true;
-        int year = Integer.parseInt("" + yearText.getText());
-        int duration = Integer.parseInt("" + durationText.getText());
+        int year = -1;
+        int duration = -1;
 
-        if (1900 > year || year > 2300){
+        if (yearAsString.length() > 4){
             yearText.setError("Invalid info!");
             flag = false;
+        } else {
+            year = Integer.parseInt(yearAsString);
+            if (1900 > year || year > 2300){
+                yearText.setError("Invalid info!");
+                flag = false;
+            }
         }
-        if (0 > duration || duration > 1000) {
+        if (durationAsString.length() > 4){
             durationText.setError("Invalid info!");
             flag = false;
+        } else {
+            duration = Integer.parseInt(durationAsString);
+            if (1 > duration || duration > 1000){
+                durationText.setError("Invalid info!");
+                flag = false;
+            }
         }
         if (flag) {
             movie.setYear(year);
             movie.setDuration(duration);
             movie.setTitle(titleText.getText() + "");
-            Intent intent = new Intent(this, MovieDetailActivity.class);
-//            startActivity(intent);
-//            try {
-//                finish();
-//            } catch (Exception e){
-//                e.printStackTrace();
-//            }
+            MovieListActivity.titles.set(position, movie.getListItemRepresentation());
+            MovieListActivity.adapter.notifyDataSetChanged();
+
             finish();
         }
     }
