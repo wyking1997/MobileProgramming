@@ -5,6 +5,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
 
@@ -24,10 +25,12 @@ public class MovieDetailActivity extends AppCompatActivity {
         EditText titleText = (EditText) findViewById(R.id.titleText);
         EditText yearText = (EditText) findViewById(R.id.yearText);
         EditText durationText = (EditText) findViewById(R.id.durationText);
+        TextView descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
 
         titleText.setText(movie.getTitle());
         durationText.setText("" + movie.getDuration());
         yearText.setText("" + movie.getYear());
+        descriptionTextView.setText(movie.getDescription());
     }
 
     public void saveInformation(View view){

@@ -55,4 +55,8 @@ public class MovieListActivity extends ListActivity {
         getListView().setAdapter(adapter);
     }
 
+    public void goToAddNewMovie(View view){
+
+    }
+
 }
