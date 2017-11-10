@@ -1,5 +1,6 @@
 package com.cluj.cinema.marius.cinemacluj;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -30,6 +31,31 @@ public class CreateNewItemActivity extends AppCompatActivity {
         }
     }
 
+    public void sendEmail(View view){
+        EditText titleText = (EditText) findViewById(R.id.titleTextAdd);
+        EditText durationText = (EditText) findViewById(R.id.durationTextAdd);
+        EditText yearText = (EditText) findViewById(R.id.yearTextAdd);
+        EditText descriptionText = (EditText) findViewById(R.id.descriptionTextAdd);
+
+        Movie movie = checkFields(titleText, durationText, yearText, descriptionText);
+        if (movie != null){
+            String[] emails = {"marius.comiati@yahoo.com"};
+            String subject = "New movie will be added!";
+            String message = movie.toString();
+
+            Intent email = new Intent(Intent.ACTION_SEND);
+            email.putExtra(Intent.EXTRA_EMAIL, emails);
+            email.putExtra(Intent.EXTRA_SUBJECT, subject);
+            email.putExtra(Intent.EXTRA_TEXT, message);
+            email.setType("message/rfc822");
+            startActivity(Intent.createChooser(email, "Choose an Email client :"));
+        }
+
+
+    }
+
+    // if all is good then return a new Movie
+    // else returns null
     public Movie checkFields(EditText titleText, EditText durationText, EditText yearText, EditText descriptionText){
         String titleAsString = titleText.getText() + "";
         String durationAsString = durationText.getText() + "";
