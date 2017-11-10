@@ -13,16 +13,10 @@ import {
     View,
     Alert, TouchableHighlight, FlatList
 } from 'react-native';
-
-
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import MovieDetailComponent from "./MovieDetailComponent";
 
 // react-native run-android
+// ctrl + M while in the app in simulator for debugg
 // Alert.alert('You tapped ' + item.title)
 
 export default class App extends Component<{}> {
@@ -35,19 +29,28 @@ export default class App extends Component<{}> {
         this.getMovieListElement = this.getMovieListElement.bind(this);
         this.setDetailView = this.setDetailView.bind(this);
         this.setCreateNewMovie = this.setCreateNewMovie.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.getMovieDetailComponent = this.getMovieDetailComponent.bind(this);
 
         movies = this.getMovies();
         element = this.getMovieListElement(movies);
         this.state = {movies: movies, element: element};
     }
 
+    handleUpdate(movie){
+        newMovies = this.state.movies;
+        newMovies[newMovies.findIndex(el => el.id === movie.id)] = movie;
+        this.setState({movies: newMovies, element: this.getMovieListElement(this.state.movies)});
+    }
+
     setDetailView(movieId){
         movie = this.state.movies.find(m => m.id === movieId);
-        Alert.alert("" + movie);
+        newElement = this.getMovieDetailComponent(movie)
+        this.setState({element: newElement});
     }
 
     setMovieListView(){
-        this.setState(this.getMovieListElement);
+        this.setState({element: this.getMovieListElement(this.state.movies)})
     }
 
     setCreateNewMovie(){
@@ -61,7 +64,7 @@ export default class App extends Component<{}> {
                 style={styles.listView}
                 data={myMovies}
                 renderItem={({item}) =>
-                    <TouchableHighlight onPress={() => {}} underlayColor="azure">
+                    <TouchableHighlight onPress={() => {this.setDetailView(item.id)}} underlayColor="azure">
                         <View style={styles.listItemView}>
                             <Text style={styles.bigBlack}>
                                 {item.title + " " + item.year + "\n" + item.duration + " minutes"}
@@ -76,6 +79,14 @@ export default class App extends Component<{}> {
                 onPress={() => {}}
             />
         </View>);
+    }
+
+    getMovieDetailComponent(movie){
+        return <MovieDetailComponent
+            movie={movie}
+            onUpdate={this.handleUpdate}
+            onComeBack={() => {this.setMovieListView()}}
+        />;
     }
 
     getMovies(){
