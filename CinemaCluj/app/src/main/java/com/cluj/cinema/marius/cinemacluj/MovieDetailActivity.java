@@ -22,9 +22,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         position = getIntent().getIntExtra(MovieListActivity.EXTRA_MOVIE_POSITION_IN_LIST, -1);
         movie = MovieListActivity.MOVIES.get(position);
 
-        EditText titleText = (EditText) findViewById(R.id.titleText);
-        EditText yearText = (EditText) findViewById(R.id.yearText);
-        EditText durationText = (EditText) findViewById(R.id.durationText);
+        EditText titleText = (EditText) findViewById(R.id.titleTextAdd);
+        EditText yearText = (EditText) findViewById(R.id.yearTextAdd);
+        EditText durationText = (EditText) findViewById(R.id.durationTextAdd);
         TextView descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
 
         titleText.setText(movie.getTitle());
@@ -34,9 +34,9 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     public void saveInformation(View view){
-        EditText titleText = (EditText) findViewById(R.id.titleText);
-        EditText yearText = (EditText) findViewById(R.id.yearText);
-        EditText durationText = (EditText) findViewById(R.id.durationText);
+        EditText titleText = (EditText) findViewById(R.id.titleTextAdd);
+        EditText yearText = (EditText) findViewById(R.id.yearTextAdd);
+        EditText durationText = (EditText) findViewById(R.id.durationTextAdd);
         String yearAsString = "" + yearText.getText();
         String durationAsString = "" + durationText.getText();
 

@@ -56,7 +56,8 @@ public class MovieListActivity extends ListActivity {
     }
 
     public void goToAddNewMovie(View view){
-
+        Intent intent = new Intent(this, CreateNewItemActivity.class);
+        startActivity(intent);
     }
 
 }

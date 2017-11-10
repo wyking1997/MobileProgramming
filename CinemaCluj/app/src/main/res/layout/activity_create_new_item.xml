@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
         android:text="Title"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -21,23 +21,23 @@
         android:id="@+id/yearTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="24dp"
         android:text="Year"
         android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        android:layout_marginLeft="24dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/durationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="24dp"
         android:text="Duration"
         android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yearTextView" />
+        android:layout_marginTop="31dp"
+        app:layout_constraintTop_toBottomOf="@+id/yearTextView"
+        android:layout_marginLeft="24dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/decriptionTextView"
@@ -47,15 +47,16 @@
         android:text="Description"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        tools:layout_editor_absoluteY="183dp" />
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/durationTextAdd" />
 
     <EditText
-        android:id="@+id/descriptionText"
+        android:id="@+id/descriptionTextAdd"
         android:layout_width="335dp"
-        android:layout_height="212dp"
+        android:layout_height="198dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="-1dp"
         android:ems="10"
         android:inputType="textMultiLine"
         app:layout_constraintHorizontal_bias="0.0"
@@ -67,11 +68,12 @@
         android:id="@+id/button4"
         android:layout_width="335dp"
         android:layout_height="54dp"
-        android:text="Button"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="24dp"
         android:layout_marginLeft="24dp"
+        android:onClick="createItem"
+        android:text="Add Movie"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="24dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -84,6 +86,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/guideline4"
-        app:layout_constraintGuide_begin="24dp"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.36" />
+
+    <EditText
+        android:id="@+id/titleTextAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintBaseline_toBaselineOf="@+id/titleTextView"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/yearTextAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBaseline_toBaselineOf="@+id/yearTextView"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/durationTextAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBaseline_toBaselineOf="@+id/durationTextView"
+        app:layout_constraintRight_toRightOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
