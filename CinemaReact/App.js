@@ -14,6 +14,7 @@ import {
     Alert, TouchableHighlight, FlatList
 } from 'react-native';
 import MovieDetailComponent from "./MovieDetailComponent";
+import AddNewMovieComponent from "./AddNewMovieComponent";
 
 // react-native run-android
 // ctrl + M while in the app in simulator for debugg
@@ -23,6 +24,7 @@ export default class App extends Component<{}> {
 
     constructor(props){
         super(props);
+        this.id = 0;
 
         this.getMovies = this.getMovies.bind(this);
         this.setDetailView = this.setDetailView.bind(this);
@@ -31,10 +33,20 @@ export default class App extends Component<{}> {
         this.setCreateNewMovie = this.setCreateNewMovie.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.getMovieDetailComponent = this.getMovieDetailComponent.bind(this);
+        this.handleAddNewMovie = this.handleAddNewMovie.bind(this);
 
         movies = this.getMovies();
         element = this.getMovieListElement(movies);
         this.state = {movies: movies, element: element};
+    }
+
+    handleAddNewMovie(movie){
+        movie.id = this.id;
+        newMovies = this.state.movies.concat(movie);
+        this.setState({
+            movies: newMovies,
+            element: this.getMovieListElement(newMovies)
+        });
     }
 
     handleUpdate(movie){
@@ -54,7 +66,7 @@ export default class App extends Component<{}> {
     }
 
     setCreateNewMovie(){
-
+        this.setState({element: this.getAddMovieComponent()});
     }
 
     getMovieListElement(movies){
@@ -76,7 +88,7 @@ export default class App extends Component<{}> {
             <Button
                 syle={{padding: 10}}
                 title="Create New Movie"
-                onPress={() => {}}
+                onPress={() => {this.setCreateNewMovie()}}
             />
         </View>);
     }
@@ -89,7 +101,15 @@ export default class App extends Component<{}> {
         />;
     }
 
+    getAddMovieComponent(){
+        return <AddNewMovieComponent
+            onAdd={this.handleAddNewMovie}
+            onComeBack={() => {this.setMovieListView()}}
+        />;
+    }
+
     getMovies(){
+        this.id = 12;
         return [
             {id: 0, year: 2017, title: "Piratii din caraibe", duration: 95, description: "betiv norocos"},
             {id: 1, year: 2017, title: "Omul paianjen", duration: 80, description: "This is with benner!"},
