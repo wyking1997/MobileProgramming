@@ -21,6 +21,16 @@ public class CreateNewItemActivity extends AppCompatActivity {
         EditText yearText = (EditText) findViewById(R.id.yearTextAdd);
         EditText descriptionText = (EditText) findViewById(R.id.descriptionTextAdd);
 
+        Movie movie = checkFields(titleText, durationText, yearText, descriptionText);
+        if (movie != null){
+            MovieListActivity.MOVIES.add(movie);
+            MovieListActivity.titles.add(movie.getListItemRepresentation());
+            MovieListActivity.adapter.notifyDataSetChanged();
+            finish();
+        }
+    }
+
+    public Movie checkFields(EditText titleText, EditText durationText, EditText yearText, EditText descriptionText){
         String titleAsString = titleText.getText() + "";
         String durationAsString = durationText.getText() + "";
         String yearAsString = yearText.getText() + "";
@@ -66,13 +76,8 @@ public class CreateNewItemActivity extends AppCompatActivity {
                 flag = false;
             }
         }
-
-        if (flag){
-            Movie movie = new Movie(yearAsInt,titleAsString,durationAsInt,descriptionAsString);
-            MovieListActivity.MOVIES.add(movie);
-            MovieListActivity.titles.add(movie.getListItemRepresentation());
-            MovieListActivity.adapter.notifyDataSetChanged();
-            finish();
-        }
+        if (flag)
+            return new Movie(yearAsInt,titleAsString,durationAsInt,descriptionAsString);
+        return null;
     }
 }
