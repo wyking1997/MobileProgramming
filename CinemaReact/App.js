@@ -70,7 +70,7 @@ export default class App extends Component<{}> {
         newMovies = this.state.movies;
         newMovies[newMovies.findIndex(el => el.id === movie.id)] = movie;
         AsyncStorage.setItem('movies',JSON.stringify(newMovies));
-        this.setState({movies: newMovies, element: this.getMovieListElement(this.state.movies)});
+        this.setState({movies: newMovies, element: this.getMovieListElement(newMovies)});
     }
 
     handleDelete(movieId){
@@ -104,14 +104,13 @@ export default class App extends Component<{}> {
                     <TouchableHighlight onPress={() => {this.setDetailView(item.id)}} underlayColor="azure">
                         <View style={styles.listItemView}>
                             <Text style={styles.bigBlack}>
-                                {item.id + "\n" +item.title + " " + item.date + "\n" + item.duration + " minutes"}
+                                {item.title + " " + item.date + "\n" + item.duration + " minutes"}
                             </Text>
                         </View>
                     </TouchableHighlight>
                 }
             />
             <Button
-                syle={{padding: 10}}
                 title="Create New Movie"
                 onPress={() => {this.setCreateNewMovie()}}
             />

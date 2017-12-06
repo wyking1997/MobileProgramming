@@ -26,7 +26,7 @@ export default class AddNewMovieComponent extends Component<{}>{
     handleAdd(){
         this.props.onAdd({
             title: this.state.title,
-            date: Number(this.state.date),
+            date: this.state.date,
             duration: Number(this.state.duration),
             description: this.state.description
         })

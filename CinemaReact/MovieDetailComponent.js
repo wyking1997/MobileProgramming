@@ -49,67 +49,71 @@ export default class MovieDetailComponent extends Component<{}>{
     render(){
         return (
             <View style = {styles.mainView}>
-                <View>
-                    <Text>Title: </Text>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1, borderBottomWidth: 0}}
-                        onChangeText={(text) => this.setState({title: text})}
-                        value={this.state.title}
+                <View style={{flex: 7}}>
+                    <View>
+                        <Text>Title: </Text>
+                        <TextInput
+                            style={{height: 40, borderColor: 'gray', borderWidth: 1, borderBottomWidth: 0}}
+                            onChangeText={(text) => this.setState({title: text})}
+                            value={this.state.title}
+                        />
+                    </View>
+                    <View>
+                        <Text>Date: </Text>
+                        <DatePicker
+                            style={{width: 200}}
+                            date={this.state.date}
+                            mode="date"
+                            placeholder="select date"
+                            format="YYYY-MM-DD"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateIcon: {
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 4,
+                                    marginLeft: 0
+                                },
+                                dateInput: {
+                                    marginLeft: 36
+                                }
+                            }}
+                            onDateChange={(date) => {
+                                this.setState({date: date})
+                            }}
+                        />
+                    </View>
+                    <View>
+                        <Text>Duration: </Text>
+                        <TextInput
+                            style={{height: 40, borderColor: 'gray', borderWidth: 1, borderBottomWidth: 0}}
+                            onChangeText={(text) => this.setState({duration: text})}
+                            value={this.state.duration}
+                            keyboardType={"numeric"}
+                            maxLength={3}
+                        />
+                    </View>
+                    <Text>
+                        {this.props.movie.description}
+                    </Text>
+                </View>
+                <View style = {{flex: 1}}>
+                    <Button
+                        title={"Delete Me!"}
+                        onPress={() => this.handleDelete()}
+                        style={{padding: 10}}
+                    />
+                    <Button
+                        title={"Update"}
+                        onPress={() => this.handleUpdate()}
+                    />
+                    <Button
+                        title={"Back"}
+                        onPress={() => this.props.onComeBack()}
+                        style={{padding: 10}}
                     />
                 </View>
-                <View>
-                    <Text>Date: </Text>
-                    <DatePicker
-                        style={{width: 200}}
-                        date={this.state.date}
-                        mode="date"
-                        placeholder="select date"
-                        format="YYYY-MM-DD"
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        customStyles={{
-                            dateIcon: {
-                                position: 'absolute',
-                                left: 0,
-                                top: 4,
-                                marginLeft: 0
-                            },
-                            dateInput: {
-                                marginLeft: 36
-                            }
-                        }}
-                        onDateChange={(date) => {
-                            this.setState({date: date})
-                        }}
-                    />
-                </View>
-                <View>
-                    <Text>Duration: </Text>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1, borderBottomWidth: 0}}
-                        onChangeText={(text) => this.setState({duration: text})}
-                        value={this.state.duration}
-                        keyboardType={"numeric"}
-                        maxLength={3}
-                    />
-                </View>
-                <Text>
-                    {this.props.movie.description}
-                </Text>
-                <Button
-                    title={"Delete Me!"}
-                    onPress={() => this.handleDelete()}
-                    style={{padding: 10}}
-                />
-                <Button
-                    title={"Update"}
-                    onPress={() => this.handleUpdate()}
-                />
-                <Button
-                    title={"Back"}
-                    onPress={() => this.props.onComeBack()}
-                    style={{padding: 10}}
-                />
             </View>
         );
     }
@@ -121,10 +125,11 @@ const styles = StyleSheet.create({
     listView: {
         padding: 10,
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: 'red',
     },
     listItemView: {
-        padding: 10
+        padding: 10,
+        backgroundColor: 'pink'
     },
     bigBlack: {
         fontSize: 20,
