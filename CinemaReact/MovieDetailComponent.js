@@ -20,6 +20,7 @@ export default class MovieDetailComponent extends Component<{}>{
         };
 
         this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleUpdate(){
@@ -30,6 +31,10 @@ export default class MovieDetailComponent extends Component<{}>{
             duration: this.state.duration,
             description: this.props.movie.description
         })
+    }
+
+    handleDelete(){
+        this.props.onDelete(this.props.movie.id);
     }
 
     render(){
@@ -66,6 +71,11 @@ export default class MovieDetailComponent extends Component<{}>{
                 <Text>
                     {this.props.movie.description}
                 </Text>
+                <Button
+                    title={"Delete Me!"}
+                    onPress={() => this.handleDelete()}
+                    style={{padding: 10}}
+                />
                 <Button
                     title={"Update"}
                     onPress={() => this.handleUpdate()}

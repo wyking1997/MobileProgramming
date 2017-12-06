@@ -36,6 +36,7 @@ export default class App extends Component<{}> {
         this.handleUpdate = this.handleUpdate.bind(this);
         this.getMovieDetailComponent = this.getMovieDetailComponent.bind(this);
         this.handleAddNewMovie = this.handleAddNewMovie.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
 
         element = this.getMovieListElement([]);
         this.state = {movies: [], element: element};
@@ -64,7 +65,6 @@ export default class App extends Component<{}> {
                 element: this.getMovieListElement(newMovies)
             });
         });
-
     }
 
     handleUpdate(movie){
@@ -72,6 +72,13 @@ export default class App extends Component<{}> {
         newMovies[newMovies.findIndex(el => el.id === movie.id)] = movie;
         AsyncStorage.setItem('movies',JSON.stringify(newMovies));
         this.setState({movies: newMovies, element: this.getMovieListElement(this.state.movies)});
+    }
+
+    handleDelete(movieId){
+        newMovies = this.state.movies;
+        newMovies = newMovies.filter(x => x.id != movieId);
+        AsyncStorage.setItem('movies',JSON.stringify(newMovies));
+        this.setState({movies: newMovies, element: this.getMovieListElement(newMovies)});
     }
 
     setDetailView(movieId){
@@ -116,6 +123,7 @@ export default class App extends Component<{}> {
         return <MovieDetailComponent
             movie={movie}
             onUpdate={this.handleUpdate}
+            onDelete={this.handleDelete}
             onComeBack={() => {this.setMovieListView()}}
         />;
     }
