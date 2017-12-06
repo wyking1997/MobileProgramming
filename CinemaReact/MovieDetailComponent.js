@@ -7,6 +7,7 @@ import {
     View,
     Alert, TouchableHighlight, FlatList, TextInput
 } from 'react-native';
+import DatePicker from 'react-native-datepicker';
 
 export default class MovieDetailComponent extends Component<{}>{
 
@@ -15,7 +16,7 @@ export default class MovieDetailComponent extends Component<{}>{
 
         this.state = {
             title: this.props.movie.title,
-            year: this.props.movie.year + "",
+            date: this.props.movie.date + "",
             duration: this.props.movie.duration + ""
         };
 
@@ -27,7 +28,7 @@ export default class MovieDetailComponent extends Component<{}>{
         this.props.onUpdate({
             id: this.props.movie.id,
             title: this.state.title,
-            year: this.state.year,
+            date: this.state.date,
             duration: this.state.duration,
             description: this.props.movie.description
         })
@@ -57,13 +58,29 @@ export default class MovieDetailComponent extends Component<{}>{
                     />
                 </View>
                 <View>
-                    <Text>Year: </Text>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1, borderBottomWidth: 0}}
-                        onChangeText={(text) => this.setState({year: text})}
-                        value={this.state.year}
-                        keyboardType={"numeric"}
-                        maxLength={4}
+                    <Text>Date: </Text>
+                    <DatePicker
+                        style={{width: 200}}
+                        date={this.state.date}
+                        mode="date"
+                        placeholder="select date"
+                        format="YYYY-MM-DD"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        customStyles={{
+                            dateIcon: {
+                                position: 'absolute',
+                                left: 0,
+                                top: 4,
+                                marginLeft: 0
+                            },
+                            dateInput: {
+                                marginLeft: 36
+                            }
+                        }}
+                        onDateChange={(date) => {
+                            this.setState({date: date})
+                        }}
                     />
                 </View>
                 <View>

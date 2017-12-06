@@ -28,7 +28,6 @@ export default class App extends Component<{}> {
     constructor(props){
         super(props);
 
-        this.getMovies = this.getMovies.bind(this);
         this.setDetailView = this.setDetailView.bind(this);
         this.getMovieListElement = this.getMovieListElement.bind(this);
         this.setDetailView = this.setDetailView.bind(this);
@@ -105,7 +104,7 @@ export default class App extends Component<{}> {
                     <TouchableHighlight onPress={() => {this.setDetailView(item.id)}} underlayColor="azure">
                         <View style={styles.listItemView}>
                             <Text style={styles.bigBlack}>
-                                {item.id + "\n" +item.title + " " + item.year + "\n" + item.duration + " minutes"}
+                                {item.id + "\n" +item.title + " " + item.date + "\n" + item.duration + " minutes"}
                             </Text>
                         </View>
                     </TouchableHighlight>
@@ -133,23 +132,6 @@ export default class App extends Component<{}> {
             onAdd={this.handleAddNewMovie}
             onComeBack={() => {this.setMovieListView()}}
         />;
-    }
-
-    getMovies(){
-        return [
-            {id: 0, year: 2017, title: "Piratii din caraibe", duration: 95, description: "betiv norocos"},
-            {id: 1, year: 2017, title: "Omul paianjen", duration: 80, description: "This is with benner!"},
-            {id: 2, year: 2017, title: "Thor", duration: 115, description: "big green animal"},
-            {id: 3, year: 2008, title: "Neinfricata", duration: 65, description: "roscata si trage cu arcul"},
-            {id: 4, year: 2010, title: "Minionii 1", duration: 87, description: "galbeni si multi 1"},
-            {id: 5, year: 2011, title: "Minionii 2", duration: 71, description: "galbeni si multi 2"},
-            {id: 6, year: 2017, title: "Piratii din caraibe", duration: 95, description: "betiv norocos"},
-            {id: 7, year: 2017, title: "Omul paianjen", duration: 80, description: "This is with benner!"},
-            {id: 8, year: 2017, title: "Thor", duration: 115, description: "big green animal"},
-            {id: 9, year: 2008, title: "Neinfricata", duration: 65, description: "roscata si trage cu arcul"},
-            {id: 10, year: 2010, title: "Minionii 1", duration: 87, description: "galbeni si multi 1"},
-            {id: 11, year: 2011, title: "Minionii 2", duration: 71, description: "galbeni si multi 2"},
-        ];
     }
 
     getMovieForFlatList(list){

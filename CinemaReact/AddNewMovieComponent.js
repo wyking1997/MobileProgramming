@@ -7,6 +7,7 @@ import {
     View,
     Alert, TouchableHighlight, FlatList, TextInput, Linking
 } from 'react-native';
+import DatePicker from 'react-native-datepicker';
 
 export default class AddNewMovieComponent extends Component<{}>{
 
@@ -14,7 +15,7 @@ export default class AddNewMovieComponent extends Component<{}>{
         super(props);
         this.state = {
             title: "",
-            year: "",
+            date: "",
             duration: "",
             description: ""
         };
@@ -25,7 +26,7 @@ export default class AddNewMovieComponent extends Component<{}>{
     handleAdd(){
         this.props.onAdd({
             title: this.state.title,
-            year: Number(this.state.year),
+            date: Number(this.state.date),
             duration: Number(this.state.duration),
             description: this.state.description
         })
@@ -34,7 +35,7 @@ export default class AddNewMovieComponent extends Component<{}>{
     sendEmail(){
         subject = "New movie";
         body = "Try to add new movie: \nTitle: " + this.state.title +
-            "\nYear: " + this.state.year +
+            "\nDate: " + this.state.date +
             "\nDuration: " + this.state.duration +
             "\nDescription: " + this.state.description;
         Linking.openURL('mailto:marius.comiati97@gmail.com?subject=' + subject + '&body=' + body);
@@ -52,13 +53,29 @@ export default class AddNewMovieComponent extends Component<{}>{
                     />
                 </View>
                 <View>
-                    <Text>Year: </Text>
-                    <TextInput
-                        style={{height: 40, borderColor: 'gray', borderWidth: 1, borderBottomWidth: 0}}
-                        onChangeText={(text) => this.setState({year: text})}
-                        value={this.state.year}
-                        keyboardType={"numeric"}
-                        maxLength={4}
+                    <Text>Date: </Text>
+                    <DatePicker
+                        style={{width: 200}}
+                        date={this.state.date}
+                        mode="date"
+                        placeholder="select date"
+                        format="YYYY-MM-DD"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        customStyles={{
+                            dateIcon: {
+                                position: 'absolute',
+                                left: 0,
+                                top: 4,
+                                marginLeft: 0
+                            },
+                            dateInput: {
+                                marginLeft: 36
+                            }
+                        }}
+                        onDateChange={(date) => {
+                            this.setState({date: date})
+                        }}
                     />
                 </View>
                 <View>
