@@ -59,7 +59,7 @@ export default class App extends Component<{}> {
             movie.id = parseInt(v);
             newMovies = tt.state.movies.concat(movie);
             AsyncStorage.setItem('movies',JSON.stringify(newMovies));
-            AsyncStorage.setItem('id', (v + 1) + "");
+            AsyncStorage.setItem('id', (parseInt(v) + 1) + "");
             this.setState({
                 movies: newMovies,
                 element: this.getMovieListElement(newMovies)
@@ -105,7 +105,7 @@ export default class App extends Component<{}> {
                     <TouchableHighlight onPress={() => {this.setDetailView(item.id)}} underlayColor="azure">
                         <View style={styles.listItemView}>
                             <Text style={styles.bigBlack}>
-                                {item.title + " " + item.year + "\n" + item.duration + " minutes"}
+                                {item.id + "\n" +item.title + " " + item.year + "\n" + item.duration + " minutes"}
                             </Text>
                         </View>
                     </TouchableHighlight>

@@ -34,7 +34,15 @@ export default class MovieDetailComponent extends Component<{}>{
     }
 
     handleDelete(){
-        this.props.onDelete(this.props.movie.id);
+        Alert.alert(
+            'Movie removal',
+            'Are you sure you want to remove this movie?',
+            [
+                {text: 'Revoke', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'OK', onPress: () => this.props.onDelete(this.props.movie.id)},
+            ],
+            { cancelable: false }
+        )
     }
 
     render(){
@@ -95,7 +103,7 @@ const styles = StyleSheet.create({
     },
     listView: {
         padding: 10,
-        flex: 0.6,
+        flex: 1,
         backgroundColor: 'white',
     },
     listItemView: {
