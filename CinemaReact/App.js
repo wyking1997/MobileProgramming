@@ -30,19 +30,33 @@ export default class App extends Component<{}> {
 
         this.setDetailView = this.setDetailView.bind(this);
         this.getMovieListElement = this.getMovieListElement.bind(this);
-        this.setDetailView = this.setDetailView.bind(this);
+        this.setCinemaDetailView = this.setCinemaDetailView.bind(this);
         this.setCreateNewMovie = this.setCreateNewMovie.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.getMovieDetailComponent = this.getMovieDetailComponent.bind(this);
         this.handleAddNewMovie = this.handleAddNewMovie.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.setCinemaListView = this.setCinemaListView.bind(this);
+        this.getListOfCinemas = this.getListOfCinemas.bind(this);
+        this.getCinemasListElement = this.getCinemasListElement.bind(this);
+        this.getCinemaForFlatList = this.getCinemaForFlatList.bind(this);
+        this.getCinemaDetailComponent = this.getCinemaDetailComponent.bind(this);
+        this.setCreateNewCinema = this.setCreateNewCinema.bind(this);
 
         element = this.getMovieListElement([]);
-        this.state = {movies: [], element: element};
+        this.state = {movies: [], cinemas: [], element: element};
 
         const secondThis = this;
+        AsyncStorage.getItem('cinemas').then(x => {
+            if (x == undefined){
+                let cinemas = JSON.stringify(secondThis.getListOfCinemas());
+                AsyncStorage.setItem('cinemas', cinemas);
+                AsyncStorage.setItem('idCinema', '3');
+                secondThis.setState({cinemas: this.getListOfCinemas()});
+            } else
+                secondThis.setState({cinemas: JSON.parse(x)});
+        });
         AsyncStorage.getItem('movies').then(x => {
-            console.log("bau " + x);
             if (x == undefined){
                 AsyncStorage.setItem('movies', JSON.stringify([]));
                 AsyncStorage.setItem('id', '0');
@@ -50,6 +64,18 @@ export default class App extends Component<{}> {
             } else
                 secondThis.setState({movies: JSON.parse(x), element: secondThis.getMovieListElement(JSON.parse(x))});
         });
+    }
+
+    getListOfCinemas(){
+        return [
+            {id: 0, name: "Cinema Marasti", adress: "Strada Aurel Vlaicu 3", phoneNumber: "0264 598 784"},
+            {id: 1, name: "Cinema Victoria", adress: "Bulevardul Eroilor 51", phoneNumber: "0264 450 143"},
+            {id: 2, name: "Cinema Florin Piersic", adress: "Piața Mihai Viteazu 11", phoneNumber: "0264 433 477"}
+        ];
+    }
+
+    setCinemaListView(){
+        this.setState({element: this.getCinemasListElement(this.state.cinemas)});
     }
 
     handleAddNewMovie(movie){
@@ -86,12 +112,22 @@ export default class App extends Component<{}> {
         this.setState({element: newElement});
     }
 
+    setCinemaDetailView(cinemaId){
+        cinema = this.state.cinemas.find(m => m.id === cinemaId);
+        newElement = this.getCinemaDetailComponent(cinema)
+        this.setState({element: newElement});
+    }
+
     setMovieListView(){
         this.setState({element: this.getMovieListElement(this.state.movies)})
     }
 
     setCreateNewMovie(){
         this.setState({element: this.getAddMovieComponent()});
+    }
+
+    setCreateNewCinema(){
+
     }
 
     getMovieListElement(movies){
@@ -114,6 +150,37 @@ export default class App extends Component<{}> {
                 title="Create New Movie"
                 onPress={() => {this.setCreateNewMovie()}}
             />
+            <Button
+                title="Go to see cinemas"
+                onPress={() => {this.setCinemaListView()}}
+            />
+        </View>);
+    }
+
+    getCinemasListElement(cinemas){
+        myCinemas = this.getCinemaForFlatList(cinemas);
+        return (<View style={styles.mainView}>
+            <FlatList
+                style={styles.listView}
+                data={myCinemas}
+                renderItem={({item}) =>
+                    <TouchableHighlight onPress={() => {this.setCinemaDetailView(item.id)}} underlayColor="azure">
+                        <View style={styles.listItemView}>
+                            <Text style={styles.bigBlack}>
+                                {item.name + "\n" + item.adress + "\n" + item.phoneNumber}
+                            </Text>
+                        </View>
+                    </TouchableHighlight>
+                }
+            />
+            <Button
+                title="Create New Cinema"
+                onPress={() => {this.setCreateNewCinema()}}
+            />
+            <Button
+                title="Go to see movies"
+                onPress={() => {this.setMovieListView()}}
+            />
         </View>);
     }
 
@@ -126,6 +193,10 @@ export default class App extends Component<{}> {
         />;
     }
 
+    getCinemaDetailComponent(cinema){
+        return null;
+    }
+
     getAddMovieComponent(){
         return <AddNewMovieComponent
             onAdd={this.handleAddNewMovie}
@@ -134,6 +205,11 @@ export default class App extends Component<{}> {
     }
 
     getMovieForFlatList(list){
+        list.map(x => x.key = x.id);
+        return list;
+    }
+
+    getCinemaForFlatList(list){
         list.map(x => x.key = x.id);
         return list;
     }
