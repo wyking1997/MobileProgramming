@@ -46,10 +46,11 @@ public class MovieListActivity extends ListActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MovieListActivity.this, MovieDetailActivity.class);
                 intent.putExtra(MovieListActivity.EXTRA_MOVIE_POSITION_IN_LIST, position);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
+        // search how to set up custom list items (define our own adapter)
         adapter = new ArrayAdapter<String>(getListView().getContext(),
                 android.R.layout.simple_list_item_1, titles);
         getListView().setAdapter(adapter);
@@ -60,4 +61,8 @@ public class MovieListActivity extends ListActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

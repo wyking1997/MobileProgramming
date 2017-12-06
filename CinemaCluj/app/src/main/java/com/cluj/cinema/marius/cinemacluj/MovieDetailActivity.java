@@ -64,6 +64,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 flag = false;
             }
         }
+        // search for onActivityResult
         if (flag) {
             movie.setYear(year);
             movie.setDuration(duration);

@@ -11,7 +11,8 @@ import {
     StyleSheet,
     Text,
     View,
-    Alert, TouchableHighlight, FlatList
+    Alert, TouchableHighlight, FlatList,
+    AsyncStorage
 } from 'react-native';
 import MovieDetailComponent from "./MovieDetailComponent";
 import AddNewMovieComponent from "./AddNewMovieComponent";
@@ -19,12 +20,13 @@ import AddNewMovieComponent from "./AddNewMovieComponent";
 // react-native run-android
 // ctrl + M while in the app in simulator for debugg
 // Alert.alert('You tapped ' + item.title)
+// adb reverse tcp:8081 tpc:8081 in the cmd of
+//              C:\Users\marius\AppData\Local\Android\sdk\platform-tools after phone is connected to the pc
 
 export default class App extends Component<{}> {
 
     constructor(props){
         super(props);
-        this.id = 0;
 
         this.getMovies = this.getMovies.bind(this);
         this.setDetailView = this.setDetailView.bind(this);
@@ -35,23 +37,40 @@ export default class App extends Component<{}> {
         this.getMovieDetailComponent = this.getMovieDetailComponent.bind(this);
         this.handleAddNewMovie = this.handleAddNewMovie.bind(this);
 
-        movies = this.getMovies();
-        element = this.getMovieListElement(movies);
-        this.state = {movies: movies, element: element};
+        element = this.getMovieListElement([]);
+        this.state = {movies: [], element: element};
+
+        const secondThis = this;
+        AsyncStorage.getItem('movies').then(x => {
+            console.log("bau " + x);
+            if (x == undefined){
+                AsyncStorage.setItem('movies', JSON.stringify([]));
+                AsyncStorage.setItem('id', '0');
+                secondThis.setState({movies: JSON.parse(x), element: secondThis.getMovieListElement(JSON.parse(x))});
+            } else
+                secondThis.setState({movies: JSON.parse(x), element: secondThis.getMovieListElement(JSON.parse(x))});
+        });
     }
 
     handleAddNewMovie(movie){
-        movie.id = this.id;
-        newMovies = this.state.movies.concat(movie);
-        this.setState({
-            movies: newMovies,
-            element: this.getMovieListElement(newMovies)
+        let tt = this;
+        AsyncStorage.getItem("id").then(v =>{
+            movie.id = parseInt(v);
+            newMovies = tt.state.movies.concat(movie);
+            AsyncStorage.setItem('movies',JSON.stringify(newMovies));
+            AsyncStorage.setItem('id', (v + 1) + "");
+            this.setState({
+                movies: newMovies,
+                element: this.getMovieListElement(newMovies)
+            });
         });
+
     }
 
     handleUpdate(movie){
         newMovies = this.state.movies;
         newMovies[newMovies.findIndex(el => el.id === movie.id)] = movie;
+        AsyncStorage.setItem('movies',JSON.stringify(newMovies));
         this.setState({movies: newMovies, element: this.getMovieListElement(this.state.movies)});
     }
 
@@ -109,7 +128,6 @@ export default class App extends Component<{}> {
     }
 
     getMovies(){
-        this.id = 12;
         return [
             {id: 0, year: 2017, title: "Piratii din caraibe", duration: 95, description: "betiv norocos"},
             {id: 1, year: 2017, title: "Omul paianjen", duration: 80, description: "This is with benner!"},
