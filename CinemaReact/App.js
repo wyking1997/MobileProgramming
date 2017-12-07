@@ -257,7 +257,9 @@ export default class App extends Component<{}> {
     }
 
     getCinemaDetailComponent(cinema){
-        return (<CinemaDetailComponent cinema={cinema} onComeBack={() => {this.setCinemaListView()}} />);
+        let assoc = this.state.associations;
+        assoc = assoc.filter(x => x.cinema_id == cinema.id);
+        return (<CinemaDetailComponent cinema={cinema} chartData={assoc} onComeBack={() => {this.setCinemaListView()}} />);
     }
 
     getAddMovieComponent(){

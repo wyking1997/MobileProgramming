@@ -9,7 +9,8 @@
   "dependencies": {
     "react": "16.0.0",
     "react-native": "0.50.3",
-    "react-native-datepicker": "^1.6.0"
+    "react-native-datepicker": "^1.6.0",
+    "react-native-pathjs-charts": "0.0.33"
   },
   "devDependencies": {
     "babel-jest": "21.2.0",
