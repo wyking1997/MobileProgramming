@@ -98,7 +98,7 @@ export default class MovieDetailComponent extends Component<{}>{
                         {this.props.movie.description}
                     </Text>
                 </View>
-                <View style = {{flex: 1}}>
+                <View style = {{flex: 3}}>
                     <Button
                         title={"Delete Me!"}
                         onPress={() => this.handleDelete()}
