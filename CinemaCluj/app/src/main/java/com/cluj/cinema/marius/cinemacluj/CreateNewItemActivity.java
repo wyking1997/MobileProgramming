@@ -1,5 +1,6 @@
 package com.cluj.cinema.marius.cinemacluj;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,13 @@ public class CreateNewItemActivity extends AppCompatActivity {
             MovieListActivity.MOVIES.add(movie);
             MovieListActivity.titles.add(movie.getListItemRepresentation());
             MovieListActivity.adapter.notifyDataSetChanged();
+
+            Intent result = new Intent();
+            result.putExtra("title", movie.getTitle());
+            result.putExtra("duration", movie.getDuration());
+            result.putExtra("year", movie.getYear());
+            result.putExtra("description", movie.getDescription());
+            setResult(Activity.RESULT_OK, result);
             finish();
         }
     }

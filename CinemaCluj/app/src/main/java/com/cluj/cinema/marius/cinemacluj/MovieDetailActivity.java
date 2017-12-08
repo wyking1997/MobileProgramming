@@ -1,5 +1,7 @@
 package com.cluj.cinema.marius.cinemacluj;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -69,9 +71,15 @@ public class MovieDetailActivity extends AppCompatActivity {
             movie.setYear(year);
             movie.setDuration(duration);
             movie.setTitle(titleText.getText() + "");
-            MovieListActivity.titles.set(position, movie.getListItemRepresentation());
-            MovieListActivity.adapter.notifyDataSetChanged();
+//            MovieListActivity.titles.set(position, movie.getListItemRepresentation());
+//            MovieListActivity.adapter.notifyDataSetChanged();
 
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("year",movie.getYear());
+            returnIntent.putExtra("duration",movie.getDuration());
+            returnIntent.putExtra("title",movie.getTitle());
+            returnIntent.putExtra("position", position);
+            setResult(Activity.RESULT_OK,returnIntent);
             finish();
         }
     }
