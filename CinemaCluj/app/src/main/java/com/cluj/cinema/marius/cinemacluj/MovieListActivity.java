@@ -22,6 +22,9 @@ public class MovieListActivity extends ListActivity {
     public static final int MOVIE_DETAIL_REQUEST = 1;
     public static final int CREATE_MOVIE_REQUEST = 2;
 
+    public static final String ACTION_UPDATE = "UPDATE";
+    public static final String ACTION_DELETE = "DELETE";
+
     public static ArrayAdapter<String> adapter;
     public static List<String> titles;
 
@@ -69,26 +72,48 @@ public class MovieListActivity extends ListActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == MOVIE_DETAIL_REQUEST && resultCode== Activity.RESULT_OK) {
-            int position = data.getIntExtra("position", -1);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == MOVIE_DETAIL_REQUEST) {
+                String action = data.getStringExtra("action");
+                if (action.equals(ACTION_UPDATE)) {
+                    int id = data.getIntExtra("id", -1);
+                    int position = -1;
+                    Movie movie = null;
+                    for (int i = 0; i < MOVIES.size(); i++)
+                        if (MOVIES.get(i).getId() == id) {
+                            movie = MOVIES.get(id);
+                            position = i;
+                            break;
+                        }
+                    movie.setTitle(data.getStringExtra("title"));
+                    movie.setYear(data.getIntExtra("year", -1));
+                    movie.setDuration(data.getIntExtra("duration", -1));
 
-            Movie movie = MOVIES.get(position);
-            movie.setTitle(data.getStringExtra("title"));
-            movie.setYear(data.getIntExtra("year", -1));
-            movie.setDuration(data.getIntExtra("duration", -1));
-
-            MovieListActivity.titles.set(position, movie.getListItemRepresentation());
-            MovieListActivity.adapter.notifyDataSetChanged();
-        } else if (requestCode == CREATE_MOVIE_REQUEST && resultCode== Activity.RESULT_OK){
-            Movie movie = new Movie(
-                    data.getIntExtra("year", -1),
-                    data.getStringExtra("title"),
-                    data.getIntExtra("duration", -1),
-                    data.getStringExtra("description")
-            );
-            MOVIES.add(movie);
-            titles.add(movie.getListItemRepresentation());
-            adapter.notifyDataSetChanged();
+                    MovieListActivity.titles.set(position, movie.getListItemRepresentation());
+                    MovieListActivity.adapter.notifyDataSetChanged();
+                } else if (action.equals(ACTION_DELETE)) {
+                    int id = data.getIntExtra("id", -1);
+                    int position = -1;
+                    for (int i = 0; i < MOVIES.size(); i++)
+                        if (MOVIES.get(i).getId() == id) {
+                            position = i;
+                            break;
+                        }
+                    MOVIES.remove(position);
+                    titles.remove(position);
+                    adapter.notifyDataSetChanged();
+                }
+            } else if (requestCode == CREATE_MOVIE_REQUEST) {
+                Movie movie = new Movie(
+                        data.getIntExtra("year", -1),
+                        data.getStringExtra("title"),
+                        data.getIntExtra("duration", -1),
+                        data.getStringExtra("description")
+                );
+                MOVIES.add(movie);
+                titles.add(movie.getListItemRepresentation());
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 }

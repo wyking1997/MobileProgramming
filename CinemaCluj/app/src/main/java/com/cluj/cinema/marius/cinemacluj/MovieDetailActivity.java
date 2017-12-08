@@ -78,13 +78,22 @@ public class MovieDetailActivity extends AppCompatActivity {
             returnIntent.putExtra("year",movie.getYear());
             returnIntent.putExtra("duration",movie.getDuration());
             returnIntent.putExtra("title",movie.getTitle());
-            returnIntent.putExtra("position", position);
+            returnIntent.putExtra("id", this.movie.getId());
+            returnIntent.putExtra("action", MovieListActivity.ACTION_UPDATE);
             setResult(Activity.RESULT_OK,returnIntent);
             finish();
         }
     }
 
     public void closeActivity(View view){
+        finish();
+    }
+
+    public void deleteMovie(View view){
+        Intent result = new Intent();
+        result.putExtra("action", MovieListActivity.ACTION_DELETE);
+        result.putExtra("id", movie.getId());
+        setResult(Activity.RESULT_OK, result);
         finish();
     }
 
