@@ -68,6 +68,11 @@ public class MovieListActivity extends ListActivity {
         startActivityForResult(intent, CREATE_MOVIE_REQUEST);
     }
 
+    public void goToCinemasList(View view){
+        Intent intent = new Intent(this, CinemaListActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

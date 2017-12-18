@@ -50,4 +50,18 @@ public class Cinema {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getListItemRepresentation(){
+        return name + "\n" + address + "\n" + phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Cinema{" +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MovieDetailActivity" />
-        <activity android:name=".CreateNewItemActivity"></activity>
+        <activity android:name=".CreateNewItemActivity" />
+        <activity android:name=".CinemaListActivity"></activity>
     </application>
 
 </manifest>

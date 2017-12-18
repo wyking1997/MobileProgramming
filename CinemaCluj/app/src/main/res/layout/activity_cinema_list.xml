@@ -4,32 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cluj.cinema.marius.cinemacluj.MovieListActivity">
+    tools:context="com.cluj.cinema.marius.cinemacluj.CinemaListActivity">
 
     <Button
         android:id="@+id/add_new_cinema"
         android:layout_width="327dp"
         android:layout_height="56dp"
-        android:onClick="goToAddNewMovie"
-        android:text="Add New Movie"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="8dp"
+        android:text="Add New Cinema"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
-        android:id="@+id/show_cinmas_button"
+        android:id="@+id/show_movies_button"
         android:layout_width="329dp"
         android:layout_height="52dp"
         android:layout_marginBottom="8dp"
-        android:onClick="goToCinemasList"
-        android:text="SHOW CINEMAS"
+        android:onClick="goToMovieList"
+        android:text="SHOW MOVIES"
         app:layout_constraintBottom_toTopOf="@+id/add_new_cinema"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/cinema_list"
         android:layout_width="349dp"
         android:layout_height="337dp"
         android:layout_marginEnd="16dp"
