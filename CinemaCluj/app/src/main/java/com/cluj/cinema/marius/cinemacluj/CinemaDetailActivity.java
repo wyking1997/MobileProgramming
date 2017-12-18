@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
+import com.cluj.cinema.marius.cinemacluj.util.Globals;
 
 public class CinemaDetailActivity extends AppCompatActivity {
 
@@ -18,7 +19,7 @@ public class CinemaDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cinema_detail);
 
         position = getIntent().getIntExtra(CinemaListActivity.EXTRA_CINEMA_POSITION_IN_LIST, -1);
-        cinema = CinemaListActivity.CINEMAS.get(position);
+        cinema = Globals.getCINEMA(position);
 
         EditText cinemaName = (EditText) findViewById(R.id.cinema_name_edit_text_id);
         EditText cinemaAddress = (EditText) findViewById(R.id.cinema_address_edit_text_id);

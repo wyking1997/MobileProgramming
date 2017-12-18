@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
+import com.cluj.cinema.marius.cinemacluj.util.Globals;
 
 import java.util.Calendar;
 
@@ -33,7 +34,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
 
         position = getIntent().getIntExtra(MovieListActivity.EXTRA_MOVIE_POSITION_IN_LIST, -1);
-        movie = MovieListActivity.MOVIES.get(position);
+        movie = Globals.getMOVIE(position);
 
         EditText titleText = (EditText) findViewById(R.id.titleTextAdd);
         TextView yearText = (TextView) findViewById(R.id.tvDate);

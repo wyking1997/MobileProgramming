@@ -9,15 +9,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
+import com.cluj.cinema.marius.cinemacluj.util.Globals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.microedition.khronos.opengles.GL;
+
 public class MovieListActivity extends ListActivity {
 
     public static final String EXTRA_MOVIE_POSITION_IN_LIST = "com.cluj.cinema.marius.cinemacluj.MovieListActivity.moviePositionInList";
-    public static final List<Movie> MOVIES;
 
     public static final int MOVIE_DETAIL_REQUEST = 1;
     public static final int CREATE_MOVIE_REQUEST = 2;
@@ -28,25 +30,14 @@ public class MovieListActivity extends ListActivity {
     public static ArrayAdapter<String> adapter;
     public static List<String> titles;
 
-    static {
-        MOVIES = new ArrayList<>();
-        MOVIES.addAll(Arrays.asList(new Movie[]{new Movie("2017-12-01", "Piratii din caraibe", 95, "betiv norocos"),
-                new Movie("2017-12-14", "Omul paianjen", 80, "This is with benner!"),
-                new Movie("2017-10-01", "Thor", 115, "big green animal"),
-                new Movie("2015-02-25", "Neinfricata", 65, "roscata si trage cu arcul"),
-                new Movie("2017-11-22", "Minionii 1", 87, "galbeni si multi 1"),
-                new Movie("2014-12-12", "Minionii 2", 71, "galbeni si multi 2")
-        }));
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
 
         titles = new ArrayList<>();
-        for (Movie m : MOVIES)
-            titles.add(m.getListItemRepresentation());
+        for (int i = 0; i < Globals.getMOVIESListSize(); i++)
+            titles.add(Globals.getMOVIE(i).getListItemRepresentation());
 
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -84,9 +75,9 @@ public class MovieListActivity extends ListActivity {
                     int id = data.getIntExtra("id", -1);
                     int position = -1;
                     Movie movie = null;
-                    for (int i = 0; i < MOVIES.size(); i++)
-                        if (MOVIES.get(i).getId() == id) {
-                            movie = MOVIES.get(id);
+                    for (int i = 0; i < Globals.getMOVIESListSize(); i++)
+                        if (Globals.getMOVIE(i).getId() == id) {
+                            movie = Globals.getMOVIE(i);
                             position = i;
                             break;
                         }
@@ -99,12 +90,12 @@ public class MovieListActivity extends ListActivity {
                 } else if (action.equals(ACTION_DELETE)) {
                     int id = data.getIntExtra("id", -1);
                     int position = -1;
-                    for (int i = 0; i < MOVIES.size(); i++)
-                        if (MOVIES.get(i).getId() == id) {
+                    for (int i = 0; i < Globals.getMOVIESListSize(); i++)
+                        if (Globals.getMOVIE(i).getId() == id) {
                             position = i;
                             break;
                         }
-                    MOVIES.remove(position);
+                    Globals.removeMovie(position);
                     titles.remove(position);
                     adapter.notifyDataSetChanged();
                 }
@@ -115,7 +106,7 @@ public class MovieListActivity extends ListActivity {
                         data.getIntExtra("duration", -1),
                         data.getStringExtra("description")
                 );
-                MOVIES.add(movie);
+                Globals.addMovie(movie);
                 titles.add(movie.getListItemRepresentation());
                 adapter.notifyDataSetChanged();
             }
