@@ -53,9 +53,9 @@ public class CinemaListActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(CinemaListActivity.this, CinemaDetailActivity.class);
-//                intent.putExtra(MovieListActivity.EXTRA_MOVIE_POSITION_IN_LIST, position);
-//                startActivityForResult(intent, CINEMA_DETAIL_REQUEST);
+                Intent intent = new Intent(CinemaListActivity.this, CinemaDetailActivity.class);
+                intent.putExtra(CinemaListActivity.EXTRA_CINEMA_POSITION_IN_LIST, position);
+                startActivity(intent);
             }
         });
 
