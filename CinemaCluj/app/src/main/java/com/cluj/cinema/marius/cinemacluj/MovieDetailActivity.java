@@ -1,6 +1,7 @@
 package com.cluj.cinema.marius.cinemacluj;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -71,8 +72,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             movie.setYear(year);
             movie.setDuration(duration);
             movie.setTitle(titleText.getText() + "");
-//            MovieListActivity.titles.set(position, movie.getListItemRepresentation());
-//            MovieListActivity.adapter.notifyDataSetChanged();
 
             Intent returnIntent = new Intent();
             returnIntent.putExtra("year",movie.getYear());
@@ -90,11 +89,29 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     public void deleteMovie(View view){
-        Intent result = new Intent();
-        result.putExtra("action", MovieListActivity.ACTION_DELETE);
-        result.putExtra("id", movie.getId());
-        setResult(Activity.RESULT_OK, result);
-        finish();
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("Are you sure you want to delete this movie?");
+        alert.setCancelable(false);
+
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent result = new Intent();
+                result.putExtra("action", MovieListActivity.ACTION_DELETE);
+                result.putExtra("id", movie.getId());
+                setResult(Activity.RESULT_OK, result);
+                finish();
+            }
+        });
+
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.create().show();
     }
 
     public void createDialog(String message, String title){
