@@ -1,33 +1,71 @@
 package com.cluj.cinema.marius.cinemacluj;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
 
+import java.util.Calendar;
+
 public class CreateNewItemActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
+    private TextView mDisplayDate;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_item);
+        initializeYearSelection();
+    }
+
+    public void initializeYearSelection(){
+        mDisplayDate = (TextView) findViewById(R.id.tvDate);
+        mDisplayDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        CreateNewItemActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year,month,day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = year + "-" + month + "-" + day;
+                mDisplayDate.setText(date);
+            }
+        };
     }
 
     public void createItem(View view){
         EditText titleText = (EditText) findViewById(R.id.titleTextAdd);
         EditText durationText = (EditText) findViewById(R.id.durationTextAdd);
-        EditText yearText = (EditText) findViewById(R.id.yearTextAdd);
         EditText descriptionText = (EditText) findViewById(R.id.descriptionTextAdd);
 
-        Movie movie = checkFields(titleText, durationText, yearText, descriptionText);
+        Movie movie = checkFields(titleText, durationText, descriptionText);
         if (movie != null){
-            MovieListActivity.MOVIES.add(movie);
-            MovieListActivity.titles.add(movie.getListItemRepresentation());
-            MovieListActivity.adapter.notifyDataSetChanged();
 
             Intent result = new Intent();
             result.putExtra("title", movie.getTitle());
@@ -42,10 +80,9 @@ public class CreateNewItemActivity extends AppCompatActivity {
     public void sendEmail(View view){
         EditText titleText = (EditText) findViewById(R.id.titleTextAdd);
         EditText durationText = (EditText) findViewById(R.id.durationTextAdd);
-        EditText yearText = (EditText) findViewById(R.id.yearTextAdd);
         EditText descriptionText = (EditText) findViewById(R.id.descriptionTextAdd);
 
-        Movie movie = checkFields(titleText, durationText, yearText, descriptionText);
+        Movie movie = checkFields(titleText, durationText, descriptionText);
         if (movie != null){
             String[] emails = {"marius.comiati@yahoo.com"};
             String subject = "New movie will be added!";
@@ -64,13 +101,12 @@ public class CreateNewItemActivity extends AppCompatActivity {
 
     // if all is good then return a new Movie
     // else returns null
-    public Movie checkFields(EditText titleText, EditText durationText, EditText yearText, EditText descriptionText){
+    public Movie checkFields(EditText titleText, EditText durationText, EditText descriptionText){
         String titleAsString = titleText.getText() + "";
         String durationAsString = durationText.getText() + "";
-        String yearAsString = yearText.getText() + "";
         String descriptionAsString = descriptionText.getText() + "";
 
-        int yearAsInt = -1;
+        String year = ((TextView) findViewById(R.id.tvDate)).getText() + "";
         int durationAsInt = -1;
         boolean flag = true;
 
@@ -96,22 +132,8 @@ public class CreateNewItemActivity extends AppCompatActivity {
                 flag = false;
             }
         }
-        if (yearAsString.equals("")) {
-            yearText.setError("Supply a movie year!");
-            flag = false;
-        }
-        else if (yearAsString.length() > 4) {
-            yearText.setError("Invalid info!");
-            flag = false;
-        } else {
-            yearAsInt = Integer.parseInt(yearAsString);
-            if (1900 > yearAsInt || yearAsInt > 2300){
-                yearText.setError("Invalid info!");
-                flag = false;
-            }
-        }
         if (flag)
-            return new Movie(yearAsInt,titleAsString,durationAsInt,descriptionAsString);
+            return new Movie(year,titleAsString,durationAsInt,descriptionAsString);
         return null;
     }
 }

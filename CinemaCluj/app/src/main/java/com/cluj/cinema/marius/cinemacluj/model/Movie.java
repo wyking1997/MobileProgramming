@@ -10,13 +10,13 @@ public class Movie implements Serializable {
 
     private static int COUNTER = 0;
 
-    private int year;
+    private String year;
     private String title;
     private int duration;
     private String description;
     private int id;
 
-    public Movie(int year, String title, int duration, String description) {
+    public Movie(String year, String title, int duration, String description) {
         this.year = year;
         this.title = title;
         this.duration = duration;
@@ -47,7 +47,7 @@ public class Movie implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = year;
+        int result = year.hashCode();
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + duration;
         return result;
@@ -57,11 +57,11 @@ public class Movie implements Serializable {
         return id;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 

@@ -100,15 +100,16 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/titleTextView"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <EditText
-        android:id="@+id/yearTextAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintBaseline_toBaselineOf="@+id/yearTextView"
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="217dp"
+        android:layout_height="38dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:ems="10"
+        android:hint="Select Date"
+        app:layout_constraintBaseline_toBaselineOf="@+id/yearTextView"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="151dp" />
 
     <EditText
         android:id="@+id/durationTextAdd"

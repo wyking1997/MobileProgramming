@@ -30,12 +30,12 @@ public class MovieListActivity extends ListActivity {
 
     static {
         MOVIES = new ArrayList<>();
-        MOVIES.addAll(Arrays.asList(new Movie[]{new Movie(2017, "Piratii din caraibe", 95, "betiv norocos"),
-                new Movie(2017, "Omul paianjen", 80, "This is with benner!"),
-                new Movie(2017, "Thor", 115, "big green animal"),
-                new Movie(2008, "Neinfricata", 65, "roscata si trage cu arcul"),
-                new Movie(2010, "Minionii 1", 87, "galbeni si multi 1"),
-                new Movie(2011, "Minionii 2", 71, "galbeni si multi 2")
+        MOVIES.addAll(Arrays.asList(new Movie[]{new Movie("2017-12-01", "Piratii din caraibe", 95, "betiv norocos"),
+                new Movie("2017-12-14", "Omul paianjen", 80, "This is with benner!"),
+                new Movie("2017-10-01", "Thor", 115, "big green animal"),
+                new Movie("2015-02-25", "Neinfricata", 65, "roscata si trage cu arcul"),
+                new Movie("2017-11-22", "Minionii 1", 87, "galbeni si multi 1"),
+                new Movie("2014-12-12", "Minionii 2", 71, "galbeni si multi 2")
         }));
     }
 
@@ -86,7 +86,7 @@ public class MovieListActivity extends ListActivity {
                             break;
                         }
                     movie.setTitle(data.getStringExtra("title"));
-                    movie.setYear(data.getIntExtra("year", -1));
+                    movie.setYear(data.getStringExtra("year"));
                     movie.setDuration(data.getIntExtra("duration", -1));
 
                     MovieListActivity.titles.set(position, movie.getListItemRepresentation());
@@ -105,7 +105,7 @@ public class MovieListActivity extends ListActivity {
                 }
             } else if (requestCode == CREATE_MOVIE_REQUEST) {
                 Movie movie = new Movie(
-                        data.getIntExtra("year", -1),
+                        data.getStringExtra("year"),
                         data.getStringExtra("title"),
                         data.getIntExtra("duration", -1),
                         data.getStringExtra("description")

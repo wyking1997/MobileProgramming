@@ -32,13 +32,13 @@
         android:id="@+id/yearTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:text="Year"
         android:textColorLink="@android:color/background_light"
         android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/yearTextAdd"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvDate" />
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -74,15 +74,13 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginEnd="16dp" />
 
-    <EditText
-        android:id="@+id/yearTextAdd"
+    <TextView
+        android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
         android:layout_marginTop="23dp"
         android:ems="10"
-        android:inputType="numberDecimal"
-        android:singleLine="false"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/durationTextAdd"
         android:layout_marginEnd="16dp" />
@@ -104,7 +102,7 @@
         android:layout_height="66dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="248dp"
         android:padding="0dp"
         android:paddingBottom="0dp"
         android:paddingEnd="0dp"
@@ -118,7 +116,7 @@
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yearTextAdd" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/backButton"
