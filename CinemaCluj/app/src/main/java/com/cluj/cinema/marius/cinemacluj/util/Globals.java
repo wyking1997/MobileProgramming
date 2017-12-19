@@ -3,6 +3,7 @@ package com.cluj.cinema.marius.cinemacluj.util;
 import com.cluj.cinema.marius.cinemacluj.model.Association;
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
+import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,9 +14,11 @@ import java.util.List;
  */
 
 public class Globals {
-    private final static List<Cinema> CINEMAS;
+//    private final static List<Cinema> CINEMAS;
     private final static List<Movie> MOVIES;
     private final static List<Association> ASSOC;
+
+    public static CinemaRepository cinemaRepository = null;
 
     static{
         MOVIES = new ArrayList<>();
@@ -25,13 +28,6 @@ public class Globals {
                 new Movie("2015-02-25", "Neinfricata", 65, "roscata si trage cu arcul"),
                 new Movie("2017-11-22", "Minionii 1", 87, "galbeni si multi 1"),
                 new Movie("2014-12-12", "Minionii 2", 71, "galbeni si multi 2")
-        }));
-
-        CINEMAS = new ArrayList<>();
-        CINEMAS.addAll(Arrays.asList(new Cinema[]{
-                new Cinema("Cinema Marasti", "Strada Aurel Vlaicu 3", "0264 598 784"),
-                new Cinema("Cinema Vicatoria","Bulevardul Eroilor 51","0264 450 143"),
-                new Cinema("Cinema Florin Piersic","Piata Mihai Viteazu 11","0264 433 477")
         }));
 
         ASSOC = new ArrayList<>();
@@ -67,8 +63,28 @@ public class Globals {
         }));
     }
 
-    public static Cinema getCINEMA(int index) {
-        return CINEMAS.get(index);
+    public static Cinema getCINEMA(Long id){
+        return cinemaRepository.getCinemaById(id);
+    }
+
+    public static List<Cinema> getCINEMAS(){
+        return cinemaRepository.getAll();
+    }
+
+    public static Cinema getCinema(int index){
+        return cinemaRepository.getCinema(index);
+    }
+
+    public static void addCinema(Cinema cinema){
+        cinemaRepository.add(cinema);
+    }
+
+    public static void updateCinema(Cinema cinema){
+        cinemaRepository.update(cinema);
+    }
+
+    public static void removeCinema(Long id){
+        cinemaRepository.delete(id);
     }
 
     public static Movie getMOVIE(int index) {
@@ -77,10 +93,6 @@ public class Globals {
 
     public static Association getASSOC(int index) {
         return ASSOC.get(index);
-    }
-
-    public static int getCINEMASListSize() {
-        return CINEMAS.size();
     }
 
     public static int getMOVIESListSize() {
@@ -95,19 +107,12 @@ public class Globals {
         MOVIES.add(movie);
     }
 
-    public static void addCinema(Cinema cinema){
-        CINEMAS.add(cinema);
-    }
-
     public static void addAssoc(Association association){
         ASSOC.add(association);
     }
 
     public static void removeMovie(int index){
         MOVIES.remove(index);
-    }
-    public static void removeCinema(int index){
-        CINEMAS.remove(index);
     }
     public static void removeAssociation(int index){
         ASSOC.remove(index);

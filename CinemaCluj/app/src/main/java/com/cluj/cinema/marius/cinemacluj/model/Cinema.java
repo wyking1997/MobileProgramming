@@ -1,22 +1,23 @@
 package com.cluj.cinema.marius.cinemacluj.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * Created by marius on 12/18/2017.
  */
-
+@Entity(tableName = "cinema")
 public class Cinema {
-    private static int COUNTER = 0;
+
+    @PrimaryKey(autoGenerate = true)
+    private Long id;
 
     private String name;
     private String address;
     private String phoneNumber;
-    private int id;
 
-    public Cinema(String name, String address, String phoneNumber) {
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        id = COUNTER++;
+
+    public Cinema() {
     }
 
     public String getName() {
@@ -43,11 +44,11 @@ public class Cinema {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

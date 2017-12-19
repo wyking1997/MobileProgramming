@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
+import com.cluj.cinema.marius.cinemacluj.repository.AppDatabase;
+import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
 import com.cluj.cinema.marius.cinemacluj.util.Globals;
 
 import java.util.ArrayList;
@@ -34,6 +36,11 @@ public class MovieListActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
+
+        if (Globals.cinemaRepository == null) {
+            AppDatabase appDatabase = AppDatabase.getAppDatabase(getApplicationContext());
+            Globals.cinemaRepository = new CinemaRepository(appDatabase);
+        }
 
         titles = new ArrayList<>();
         for (int i = 0; i < Globals.getMOVIESListSize(); i++)

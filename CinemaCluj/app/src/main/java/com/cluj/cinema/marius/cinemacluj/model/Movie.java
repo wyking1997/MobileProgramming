@@ -1,5 +1,7 @@
 package com.cluj.cinema.marius.cinemacluj.model;
 
+import android.arch.persistence.room.Entity;
+
 import java.io.Serializable;
 
 /**

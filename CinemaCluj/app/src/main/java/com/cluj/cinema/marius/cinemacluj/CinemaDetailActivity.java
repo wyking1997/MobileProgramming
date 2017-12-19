@@ -19,7 +19,7 @@ public class CinemaDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cinema_detail);
 
         position = getIntent().getIntExtra(CinemaListActivity.EXTRA_CINEMA_POSITION_IN_LIST, -1);
-        cinema = Globals.getCINEMA(position);
+        cinema = Globals.getCinema(position);
 
         EditText cinemaName = (EditText) findViewById(R.id.cinema_name_edit_text_id);
         EditText cinemaAddress = (EditText) findViewById(R.id.cinema_address_edit_text_id);

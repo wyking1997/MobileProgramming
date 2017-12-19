@@ -36,8 +36,8 @@ public class CinemaListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cinema_list);
 
         titles = new ArrayList<>();
-        for (int i = 0; i < Globals.getCINEMASListSize(); i++)
-            titles.add(Globals.getCINEMA(i).getListItemRepresentation());
+        for (Cinema c : Globals.getCINEMAS())
+            titles.add(c.getListItemRepresentation());
 
         ListView list = (ListView) findViewById(R.id.cinema_list);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
