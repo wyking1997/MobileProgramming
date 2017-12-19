@@ -1,7 +1,9 @@
 package com.cluj.cinema.marius.cinemacluj;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -28,5 +30,10 @@ public class CinemaDetailActivity extends AppCompatActivity {
         cinemaName.setText(cinema.getName());
         cinemaAddress.setText(cinema.getAddress());
         cinemaPhone.setText(cinema.getPhoneNumber());
+    }
+
+    public void showStatistics(View view){
+        Intent intent = new Intent(this, CinmaChartActivity.class);
+        startActivity(intent);
     }
 }

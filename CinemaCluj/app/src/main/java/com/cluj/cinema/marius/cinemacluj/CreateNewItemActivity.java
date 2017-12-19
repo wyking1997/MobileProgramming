@@ -132,8 +132,14 @@ public class CreateNewItemActivity extends AppCompatActivity {
                 flag = false;
             }
         }
-        if (flag)
-            return new Movie(year,titleAsString,durationAsInt,descriptionAsString);
-        return null;
+        Movie m = null;
+        if (flag) {
+            m = new Movie();
+            m.setDescription(descriptionAsString);
+            m.setYear(year);
+            m.setTitle(titleAsString);
+            m.setDuration(durationAsInt);
+        }
+        return m;
     }
 }

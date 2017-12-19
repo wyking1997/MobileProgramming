@@ -3,7 +3,6 @@ package com.cluj.cinema.marius.cinemacluj.repository;
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

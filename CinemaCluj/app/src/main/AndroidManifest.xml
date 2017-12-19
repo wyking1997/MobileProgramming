@@ -19,7 +19,8 @@
         <activity android:name=".MovieDetailActivity" />
         <activity android:name=".CreateNewItemActivity" />
         <activity android:name=".CinemaListActivity" />
-        <activity android:name=".CinemaDetailActivity"></activity>
+        <activity android:name=".CinemaDetailActivity" />
+        <activity android:name=".CinmaChartActivity"></activity>
     </application>
 
 </manifest>

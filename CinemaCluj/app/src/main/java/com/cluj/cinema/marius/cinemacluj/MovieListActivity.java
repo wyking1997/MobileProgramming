@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
 import com.cluj.cinema.marius.cinemacluj.repository.AppDatabase;
 import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
+import com.cluj.cinema.marius.cinemacluj.repository.MovieRepository;
 import com.cluj.cinema.marius.cinemacluj.util.Globals;
 
 import java.util.ArrayList;
@@ -40,11 +41,12 @@ public class MovieListActivity extends ListActivity {
         if (Globals.cinemaRepository == null) {
             AppDatabase appDatabase = AppDatabase.getAppDatabase(getApplicationContext());
             Globals.cinemaRepository = new CinemaRepository(appDatabase);
+            Globals.movieRepository = new MovieRepository(appDatabase);
         }
 
         titles = new ArrayList<>();
-        for (int i = 0; i < Globals.getMOVIESListSize(); i++)
-            titles.add(Globals.getMOVIE(i).getListItemRepresentation());
+        for (Movie m : Globals.getMOVIES())
+            titles.add(m.getListItemRepresentation());
 
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,10 +81,10 @@ public class MovieListActivity extends ListActivity {
             if (requestCode == MOVIE_DETAIL_REQUEST) {
                 String action = data.getStringExtra("action");
                 if (action.equals(ACTION_UPDATE)) {
-                    int id = data.getIntExtra("id", -1);
+                    long id = data.getLongExtra("id", -1);
                     int position = -1;
                     Movie movie = null;
-                    for (int i = 0; i < Globals.getMOVIESListSize(); i++)
+                    for (int i = 0; i < Globals.getMOVIES().size(); i++)
                         if (Globals.getMOVIE(i).getId() == id) {
                             movie = Globals.getMOVIE(i);
                             position = i;
@@ -91,28 +93,28 @@ public class MovieListActivity extends ListActivity {
                     movie.setTitle(data.getStringExtra("title"));
                     movie.setYear(data.getStringExtra("year"));
                     movie.setDuration(data.getIntExtra("duration", -1));
+                    Globals.updateMovie(movie);
 
                     MovieListActivity.titles.set(position, movie.getListItemRepresentation());
                     MovieListActivity.adapter.notifyDataSetChanged();
                 } else if (action.equals(ACTION_DELETE)) {
-                    int id = data.getIntExtra("id", -1);
+                    long id = data.getLongExtra("id", -1);
                     int position = -1;
-                    for (int i = 0; i < Globals.getMOVIESListSize(); i++)
+                    for (int i = 0; i < Globals.getMOVIES().size(); i++)
                         if (Globals.getMOVIE(i).getId() == id) {
                             position = i;
                             break;
                         }
-                    Globals.removeMovie(position);
+                    Globals.removeMovie(id);
                     titles.remove(position);
                     adapter.notifyDataSetChanged();
                 }
             } else if (requestCode == CREATE_MOVIE_REQUEST) {
-                Movie movie = new Movie(
-                        data.getStringExtra("year"),
-                        data.getStringExtra("title"),
-                        data.getIntExtra("duration", -1),
-                        data.getStringExtra("description")
-                );
+                Movie movie = new Movie();
+                movie.setDuration(data.getIntExtra("duration", -1));
+                movie.setTitle(data.getStringExtra("title"));
+                movie.setYear(data.getStringExtra("year"));
+                movie.setDescription(data.getStringExtra("description"));
                 Globals.addMovie(movie);
                 titles.add(movie.getListItemRepresentation());
                 adapter.notifyDataSetChanged();

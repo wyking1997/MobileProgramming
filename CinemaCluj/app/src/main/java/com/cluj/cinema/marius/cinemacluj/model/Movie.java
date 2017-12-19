@@ -1,29 +1,26 @@
 package com.cluj.cinema.marius.cinemacluj.model;
 
 import android.arch.persistence.room.Entity;
-
-import java.io.Serializable;
+import android.arch.persistence.room.PrimaryKey;
 
 /**
  * Created by marius on 11/2/2017.
  */
 
-public class Movie implements Serializable {
+@Entity(tableName = "movie")
+public class Movie{
+    public void setId(long id) {
+        this.id = id;
+    }
 
-    private static int COUNTER = 0;
+    @PrimaryKey(autoGenerate = true)
+    private long id;
 
     private String year;
     private String title;
     private int duration;
     private String description;
-    private int id;
-
-    public Movie(String year, String title, int duration, String description) {
-        this.year = year;
-        this.title = title;
-        this.duration = duration;
-        this.description = description;
-        id = COUNTER++;
+    public Movie() {
     }
 
     public String getDescription() {
@@ -55,7 +52,7 @@ public class Movie implements Serializable {
         return result;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
