@@ -3,6 +3,7 @@ package com.cluj.cinema.marius.cinemacluj.util;
 import com.cluj.cinema.marius.cinemacluj.model.Association;
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
+import com.cluj.cinema.marius.cinemacluj.repository.AssociationRepository;
 import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
 import com.cluj.cinema.marius.cinemacluj.repository.MovieRepository;
 
@@ -15,51 +16,10 @@ import java.util.List;
  */
 
 public class Globals {
-//    private final static List<Cinema> CINEMAS;
-//    private final static List<Movie> MOVIES;
-    private final static List<Association> ASSOC;
 
     public static CinemaRepository cinemaRepository = null;
     public static MovieRepository movieRepository = null;
-
-    static{
-//        MOVIES = new ArrayList<>();
-//        MOVIES.addAll(Arrays.asList(
-
-//        }));
-
-        ASSOC = new ArrayList<>();
-        ASSOC.addAll(Arrays.asList(new Association[]{
-                new Association(0, 0, "2017-12-01"),
-                new Association(0, 0, "2017-12-02"),
-                new Association(0, 0, "2017-12-03"),
-                new Association(0, 2, "2017-12-02"),
-                new Association(0, 2, "2017-12-03"),
-                new Association(0, 3, "2017-12-03"),
-                new Association(0, 4, "2017-12-01"),
-                new Association(0, 4, "2017-12-02"),
-                new Association(0, 4, "2017-12-03"),
-                new Association(1, 1, "2017-12-01"),
-                new Association(1, 1, "2017-12-01"),
-                new Association(1, 1, "2017-12-02"),
-                new Association(1, 1, "2017-12-02"),
-                new Association(1, 1, "2017-12-03"),
-                new Association(1, 1, "2017-12-04"),
-                new Association(1, 2, "2017-12-02"),
-                new Association(1, 2, "2017-12-04"),
-                new Association(2, 0, "2017-12-01"),
-                new Association(2, 0, "2017-12-02"),
-                new Association(2, 3, "2017-12-02"),
-                new Association(2, 3, "2017-12-02"),
-                new Association(2, 3, "2017-12-03"),
-                new Association(2, 3, "2017-12-01"),
-                new Association(2, 3, "2017-12-01"),
-                new Association(2, 4, "2017-12-01"),
-                new Association(2, 4, "2017-12-02"),
-                new Association(2, 4, "2017-12-03"),
-                new Association(2, 4, "2017-12-04")
-        }));
-    }
+    public static AssociationRepository associationRepository = null;
 
 
 
@@ -115,18 +75,22 @@ public class Globals {
 
 
     public static Association getASSOC(int index) {
-        return ASSOC.get(index);
+        return associationRepository.getAssociation(index);
     }
 
-    public static int getASSOCListSize() {
-        return ASSOC.size();
+    public static List<Association> getASSOCS() {
+        return associationRepository.getAll();
     }
 
     public static void addAssoc(Association association){
-        ASSOC.add(association);
+        associationRepository.add(association);
     }
 
-    public static void removeAssociation(int index){
-        ASSOC.remove(index);
+    public static void removeAssociation(long id){
+        associationRepository.delete(id);
+    }
+
+    public static void updateAssoc(Association association){
+        associationRepository.update(association);
     }
 }

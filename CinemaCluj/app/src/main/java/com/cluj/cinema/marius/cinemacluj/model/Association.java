@@ -1,45 +1,42 @@
 package com.cluj.cinema.marius.cinemacluj.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * Created by marius on 12/18/2017.
  */
 
+@Entity(tableName = "assoc")
 public class Association {
-    private static int COUNTER = 0;
 
-    private int id;
-    private int cinema_id;
-    private int movie_id;
+    @PrimaryKey(autoGenerate = true)
+    private Long id;
+    private Long cinema_id;
+    private Long movie_id;
     private String date;
 
-    public Association(int cinema_id, int movie_id, String date) {
-        this.cinema_id = cinema_id;
-        this.movie_id = movie_id;
-        this.date = date;
-        id = COUNTER++;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getCinema_id() {
+    public Long getCinema_id() {
         return cinema_id;
     }
 
-    public void setCinema_id(int cinema_id) {
+    public void setCinema_id(Long cinema_id) {
         this.cinema_id = cinema_id;
     }
 
-    public int getMovie_id() {
+    public Long getMovie_id() {
         return movie_id;
     }
 
-    public void setMovie_id(int movie_id) {
+    public void setMovie_id(Long movie_id) {
         this.movie_id = movie_id;
     }
 
