@@ -44,6 +44,16 @@ public class Association {
         return date;
     }
 
+    @Override
+    public String toString() {
+        return "Association{" +
+                "id=" + id +
+                ", cinema_id=" + cinema_id +
+                ", movie_id=" + movie_id +
+                ", date='" + date + '\'' +
+                '}';
+    }
+
     public void setDate(String date) {
         this.date = date;
     }

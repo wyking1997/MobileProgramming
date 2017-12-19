@@ -34,15 +34,15 @@ public class AssociationRepository {
             e.printStackTrace();
         }
 
-//        Association a1 = getAssociation(0, 0, "2017-12-01");
-//        Association a2 = getAssociation(0, 0, "2017-12-02");
-//        Association a3 = getAssociation(0, 0, "2017-12-03");
-//        Association a4 = getAssociation(0, 2, "2017-12-02");
-//        Association a5 = getAssociation(0, 2, "2017-12-03");
-//        Association a6 = getAssociation(0, 3, "2017-12-03");
-//        Association a7 = getAssociation(0, 4, "2017-12-01");
-//        Association a8 = getAssociation(0, 4, "2017-12-02");
-//        Association a9 = getAssociation(0, 4, "2017-12-03");
+//        Association a1 = getAssociation(3, 0, "2017-12-01");
+//        Association a2 = getAssociation(3, 0, "2017-12-02");
+//        Association a3 = getAssociation(3, 0, "2017-12-03");
+//        Association a4 = getAssociation(3, 2, "2017-12-02");
+//        Association a5 = getAssociation(3, 2, "2017-12-03");
+//        Association a6 = getAssociation(3, 3, "2017-12-03");
+//        Association a7 = getAssociation(3, 4, "2017-12-01");
+//        Association a8 = getAssociation(3, 4, "2017-12-02");
+//        Association a9 = getAssociation(3, 4, "2017-12-03");
 //        Association a10 = getAssociation(1, 1, "2017-12-01");
 //        Association a11 = getAssociation(1, 1, "2017-12-01");
 //        Association a12 = getAssociation(1, 1, "2017-12-02");

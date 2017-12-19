@@ -34,6 +34,7 @@ public class CinemaDetailActivity extends AppCompatActivity {
 
     public void showStatistics(View view){
         Intent intent = new Intent(this, CinmaChartActivity.class);
+        intent.putExtra("cinema_id", cinema.getId());
         startActivity(intent);
     }
 }
