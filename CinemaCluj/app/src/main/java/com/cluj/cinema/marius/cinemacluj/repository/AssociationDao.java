@@ -20,7 +20,7 @@ public interface AssociationDao {
     List<Association> getAll();
 
     @Query("SELECT * FROM assoc where id = :id")
-    Movie getMovieById(Long id);
+    Association getMovieById(Long id);
 
     @Insert
     void insertAll(Association... assocs);
