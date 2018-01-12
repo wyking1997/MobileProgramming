@@ -11,6 +11,10 @@ import android.widget.ListView;
 import com.cluj.cinema.marius.cinemacluj.R;
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
+import com.cluj.cinema.marius.cinemacluj.repository.AppDatabase;
+import com.cluj.cinema.marius.cinemacluj.repository.AssociationRepository;
+import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
+import com.cluj.cinema.marius.cinemacluj.repository.MovieRepository;
 import com.cluj.cinema.marius.cinemacluj.util.Globals;
 
 import java.util.ArrayList;
@@ -35,8 +39,15 @@ public class CinemaListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cinema_list);
 
+        if (Globals.cinemaRepository == null) {
+            AppDatabase appDatabase = AppDatabase.getAppDatabase(getApplicationContext());
+            Globals.cinemaRepository = new CinemaRepository(appDatabase);
+            Globals.movieRepository = new MovieRepository(appDatabase);
+            Globals.associationRepository = new AssociationRepository(appDatabase);
+        }
+
         titles = new ArrayList<>();
-        for (Cinema c : Globals.getCINEMAS())
+        for (Cinema c : Globals.cinemaRepository.getAll())
             titles.add(c.getListItemRepresentation());
 
         ListView list = (ListView) findViewById(R.id.cinema_list);

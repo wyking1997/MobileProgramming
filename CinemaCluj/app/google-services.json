@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "152645091090",
+    "firebase_url": "https://cinemacluj.firebaseio.com",
+    "project_id": "cinemacluj",
+    "storage_bucket": "cinemacluj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152645091090:android:22e6e5f7b97a7af3",
+        "android_client_info": {
+          "package_name": "com.cluj.cinema.marius.cinemacluj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152645091090-30u7t3o7bfpfru073756ol1pedhgsks8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cluj.cinema.marius.cinemacluj",
+            "certificate_hash": "0241655fe0325606618bca0bdc9d319cb2a8b551"
+          }
+        },
+        {
+          "client_id": "152645091090-4uddrrhh7f8do7m8f6v73u9i44jnqpme.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKPhSXOJq-e6IPVASqzj2rReSgA7rGW04"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152645091090-4uddrrhh7f8do7m8f6v73u9i44jnqpme.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
