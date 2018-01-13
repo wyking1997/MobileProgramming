@@ -47,7 +47,7 @@ public class MovieRepository {
     public void update(final Movie e) {
         Movie initialMovie = null;
         for(Movie sl : repo) {
-            if(sl.getFirebaseKey() == e.getFirebaseKey()) {
+            if(sl.getFirebaseKey().equals(e.getFirebaseKey())) {
                 initialMovie = sl;
                 break;
             }
@@ -69,7 +69,7 @@ public class MovieRepository {
     public void delete(final String key) {
 
         for(Movie sl : repo) {
-            if(sl.getFirebaseKey() == key) {
+            if(sl.getFirebaseKey().equals(key)) {
                 repo.remove(sl);
                 final Movie toDelete = sl;
                 executor.execute(new Runnable() {

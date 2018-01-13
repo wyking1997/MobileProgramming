@@ -49,7 +49,7 @@ public class AssociationRepository {
     public void update(final Association e) {
         Association initialAssociation = null;
         for(Association sl : repo) {
-            if(sl.getFirebaseKey() == e.getFirebaseKey()) {
+            if(sl.getFirebaseKey().equals(e.getFirebaseKey())) {
                 initialAssociation = sl;
                 break;
             }
@@ -70,7 +70,7 @@ public class AssociationRepository {
     public void delete(final String firebase_key) {
 
         for(Association sl : repo) {
-            if(sl.getFirebaseKey() == firebase_key) {
+            if(sl.getFirebaseKey().equals(firebase_key)) {
                 repo.remove(sl);
                 final Association toDelete = sl;
                 executor.execute(new Runnable() {

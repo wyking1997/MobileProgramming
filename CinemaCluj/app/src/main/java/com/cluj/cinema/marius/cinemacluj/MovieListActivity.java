@@ -141,18 +141,23 @@ public class MovieListActivity extends ListActivity {
 
                 if(Globals.getMovieByKey(m.getFirebaseKey()) == null){
                     Globals.movieRepository.add(m);
-                    titles.add(m.getListItemRepresentation());
-                    adapter.notifyDataSetChanged();
+                    if(titles != null) {
+                        titles.add(m.getListItemRepresentation());
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Movie newMovie = dataSnapshot.getValue(Movie.class);
-                titles.remove(Globals.getMovieByKey(newMovie.getFirebaseKey()).getListItemRepresentation());
-                Globals.updateMovie(newMovie);
-                titles.add(newMovie.getListItemRepresentation());
-                adapter.notifyDataSetChanged();
+                if(titles != null)
+                    titles.remove(Globals.getMovieByKey(newMovie.getFirebaseKey()).getListItemRepresentation());
+                Globals.movieRepository.update(newMovie);
+                if(titles != null) {
+                    titles.add(newMovie.getListItemRepresentation());
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -160,8 +165,10 @@ public class MovieListActivity extends ListActivity {
                 for(int i=0;i<Globals.movieRepository.getAll().size();i++){
                     if(Globals.movieRepository.getMovie(i).getFirebaseKey().equals(dataSnapshot.getKey())){
                         Globals.movieRepository.delete(dataSnapshot.getKey());
-                        titles.remove(i);
-                        adapter.notifyDataSetChanged();
+                        if(titles != null) {
+                            titles.remove(i);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 }
 

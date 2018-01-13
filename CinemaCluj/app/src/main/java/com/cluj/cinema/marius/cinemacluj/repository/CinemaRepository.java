@@ -49,7 +49,7 @@ public class CinemaRepository {
     public void update(final Cinema e) {
         Cinema initialCinema = null;
         for(Cinema sl : repo) {
-            if(sl.getFirebaseKey() == e.getFirebaseKey()) {
+            if(sl.getFirebaseKey().equals(e.getFirebaseKey())) {
                 initialCinema = sl;
                 break;
             }
@@ -70,7 +70,7 @@ public class CinemaRepository {
     public void delete(final String key) {
 
         for(Cinema sl : repo) {
-            if(sl.getFirebaseKey() == key) {
+            if(sl.getFirebaseKey().equals(key)) {
                 repo.remove(sl);
                 final Cinema toDelete = sl;
                 executor.execute(new Runnable() {

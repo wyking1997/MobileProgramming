@@ -133,7 +133,7 @@ public class CinemaListActivity extends AppCompatActivity {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Cinema newCinema = dataSnapshot.getValue(Cinema.class);
                 titles.remove(Globals.getCinemaByKey(newCinema.getFirebaseKey()).getListItemRepresentation());
-                Globals.updateCinema(newCinema);
+                Globals.cinemaRepository.update(newCinema);
                 titles.add(newCinema.getListItemRepresentation());
                 adapter.notifyDataSetChanged();
             }
@@ -189,7 +189,7 @@ public class CinemaListActivity extends AppCompatActivity {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Association newAssociation = dataSnapshot.getValue(Association.class);
-                Globals.updateAssociation(newAssociation);
+                Globals.associationRepository.update(newAssociation);
             }
 
             @Override
