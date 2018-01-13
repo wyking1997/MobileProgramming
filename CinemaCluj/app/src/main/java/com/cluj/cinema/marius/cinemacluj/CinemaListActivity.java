@@ -1,18 +1,15 @@
 package com.cluj.cinema.marius.cinemacluj;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.cluj.cinema.marius.cinemacluj.R;
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
-import com.cluj.cinema.marius.cinemacluj.model.Movie;
 import com.cluj.cinema.marius.cinemacluj.repository.AppDatabase;
 import com.cluj.cinema.marius.cinemacluj.repository.AssociationRepository;
 import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
@@ -24,7 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CinemaListActivity extends AppCompatActivity {
