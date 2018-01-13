@@ -36,7 +36,7 @@ public class CinmaChartActivity extends AppCompatActivity {
         String cinema_key = getIntent().getStringExtra("cinema_key");
         List<Association> ls = new ArrayList<>();
         for (Association a : Globals.getAssociations()){
-            if (cinema_key == a.getCinemaKey()) {
+            if (cinema_key.equals(a.getCinemaKey())) {
                 Association as = new Association();
                 as.setDate(a.getDate());
                 as.setCinemaKey(a.getCinemaKey());

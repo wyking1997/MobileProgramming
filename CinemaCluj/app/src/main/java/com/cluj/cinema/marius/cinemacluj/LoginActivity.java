@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.cluj.cinema.marius.cinemacluj.model.Association;
+import com.cluj.cinema.marius.cinemacluj.model.Cinema;
+import com.cluj.cinema.marius.cinemacluj.model.Movie;
 import com.cluj.cinema.marius.cinemacluj.model.User;
 import com.cluj.cinema.marius.cinemacluj.repository.AppDatabase;
 import com.cluj.cinema.marius.cinemacluj.repository.AssociationRepository;
@@ -35,6 +37,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -63,6 +70,54 @@ public class LoginActivity extends AppCompatActivity {
             Globals.userRepository = new UserRepository(appDatabase);
         }
         setUpAssocListener();
+
+//        Globals.addCinema(new Cinema("Cinema Marasti","marasti","0752125080"));
+//        Globals.addCinema(new Cinema("Cinema Victoria","victoria","0752125080"));
+//        Globals.addCinema(new Cinema("Cinema Florin Piersic","viteazu","0752125080"));
+//        Globals.addCinema(new Cinema("Cinema Magia","iulia",""));
+//        Globals.addMovie(new Movie("1995","Minionii",100,"galbeni si multi",""));
+//        Globals.addMovie(new Movie("2011","Minionii 2",100,"galbeni si multi 2",""));
+//        Globals.addMovie(new Movie("2018","Minionii 3",100,"galbeni si multi 3",""));
+//        Globals.addMovie(new Movie("2011","Star wars",100,"arme galaxii babe",""));
+//        Globals.addMovie(new Movie("2000","Thor",100,"verde si gras",""));
+//        Globals.addMovie(new Movie("1997","Cei 4 fantastici",100,"multi si magici",""));
+//        Globals.addMovie(new Movie("2013","Rapunzel",100,"copii frumosi",""));
+//        Globals.addMovie(new Movie("2015","Mama",100,"groaza",""));
+
+//        List<String> cinemas = Arrays.asList(
+//                "-L2knRCBKbEGRuufx3BX",
+//                "-L2knRCpiKl8tZbcL7Di",
+//                "-L2knRCqjRl3TckF5Nih",
+//                "-L2knRCsvM4aKYPMT9R2"
+//        );
+//        List<String> movies = Arrays.asList(
+//                "-L2k1xgV4jcdCjAhYrhB",
+//                "-L2k224O4Xd9FxWem-q-",
+//                "-L2knRCtR6b8dmU40B5n",
+//                "-L2knRD2agrrNH9bCudd",
+//                "-L2knRD4uj7k9NPeiAtQ",
+//                "-L2knRD5lL4ief16E_ja",
+//                "-L2knRD7z-y67qJ3yfDK",
+//                "-L2knRD8Mpl586nthIv1",
+//                "-L2knRDAQ4v8-PoblbPW",
+//                "-L2knRDCHV9y_Wpo3ODN"
+//        );
+//        List<String> dates = Arrays.asList(
+//                "2018-01-08",
+//                "2018-01-09",
+//                "2018-01-10",
+//                "2018-01-11",
+//                "2018-01-12",
+//                "2018-01-13"
+//        );
+//        for (int i =0; i < 100; i++){
+//            Random random = new Random();
+//            int cinema = random.nextInt(cinemas.size());
+//            int movie = random.nextInt(movies.size());
+//            int date = random.nextInt(dates.size());
+//            Globals.addAssocation(new Association(cinemas.get(cinema), movies.get(movie), dates.get(date)));
+//        }
+
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
