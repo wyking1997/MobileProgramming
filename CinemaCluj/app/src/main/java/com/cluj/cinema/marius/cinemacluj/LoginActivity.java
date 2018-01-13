@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){
                     startActivity(new Intent(LoginActivity.this, CinemaListActivity.class));
+                    finish();
                 }
             }
         };
