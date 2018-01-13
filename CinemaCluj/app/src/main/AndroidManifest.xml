@@ -9,14 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MovieListActivity">
-        </activity>
+        <activity android:name=".MovieListActivity"></activity>
         <activity android:name=".MovieDetailActivity" />
         <activity android:name=".CreateNewItemActivity" />
         <activity android:name=".CinemaListActivity" />
         <activity android:name=".CinemaDetailActivity" />
         <activity android:name=".CinmaChartActivity" />
-
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".CinemaListActivityForSimpleUser"></activity>
     </application>
 
 </manifest>

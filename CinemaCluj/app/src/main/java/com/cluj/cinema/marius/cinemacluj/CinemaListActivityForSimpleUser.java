@@ -1,8 +1,8 @@
 package com.cluj.cinema.marius.cinemacluj;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,7 +15,6 @@ import com.cluj.cinema.marius.cinemacluj.repository.AppDatabase;
 import com.cluj.cinema.marius.cinemacluj.repository.AssociationRepository;
 import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
 import com.cluj.cinema.marius.cinemacluj.repository.MovieRepository;
-import com.cluj.cinema.marius.cinemacluj.repository.UserRepository;
 import com.cluj.cinema.marius.cinemacluj.util.Globals;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,7 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CinemaListActivity extends AppCompatActivity {
+public class CinemaListActivityForSimpleUser extends AppCompatActivity {
 
     public static final String EXTRA_CINEMA_POSITION_IN_LIST = "com.cluj.cinema.marius.cinemacluj.CinemaListActivity.cinemaPositionInList";
     public static final int CINEMA_DETAIL_REQUEST = 1;
@@ -48,8 +47,9 @@ public class CinemaListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cinema_list);
+        setContentView(R.layout.activity_cinema_list_for_simple_user);
 
         mAuth= FirebaseAuth.getInstance();
 
@@ -64,7 +64,7 @@ public class CinemaListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 mGoogleSignInClient.signOut();
-                startActivity(new Intent(CinemaListActivity.this, LoginActivity.class));
+                startActivity(new Intent(CinemaListActivityForSimpleUser.this, LoginActivity.class));
                 finish();
             }
         });
@@ -74,7 +74,6 @@ public class CinemaListActivity extends AppCompatActivity {
             Globals.cinemaRepository = new CinemaRepository(appDatabase);
             Globals.movieRepository = new MovieRepository(appDatabase);
             Globals.associationRepository = new AssociationRepository(appDatabase);
-            Globals.userRepository = new UserRepository(appDatabase);
         }
 
         titles = new ArrayList<>();
@@ -86,7 +85,7 @@ public class CinemaListActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(CinemaListActivity.this, CinemaDetailActivity.class);
+                Intent intent = new Intent(CinemaListActivityForSimpleUser.this, CinemaDetailActivity.class);
                 intent.putExtra(CinemaListActivity.EXTRA_CINEMA_POSITION_IN_LIST, position);
                 startActivity(intent);
             }

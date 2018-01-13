@@ -8,12 +8,13 @@ import android.content.Context;
 import com.cluj.cinema.marius.cinemacluj.model.Association;
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
+import com.cluj.cinema.marius.cinemacluj.model.User;
 
 /**
  * Created by marius on 12/19/2017.
  */
 
-@Database(entities = {Cinema.class, Movie.class, Association.class}, version = 6)
+@Database(entities = {Cinema.class, Movie.class, Association.class, User.class}, version = 6)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -21,6 +22,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract CinemaDao cinemaDao();
     public abstract MovieDao movieDao();
     public abstract AssociationDao associationDao();
+    public abstract UserDao userDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {

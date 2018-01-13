@@ -8,6 +8,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.cluj.cinema.marius.cinemacluj.model.Association;
+import com.cluj.cinema.marius.cinemacluj.model.User;
+import com.cluj.cinema.marius.cinemacluj.repository.AppDatabase;
+import com.cluj.cinema.marius.cinemacluj.repository.AssociationRepository;
+import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
+import com.cluj.cinema.marius.cinemacluj.repository.MovieRepository;
+import com.cluj.cinema.marius.cinemacluj.repository.UserRepository;
+import com.cluj.cinema.marius.cinemacluj.util.Globals;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -22,6 +30,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,21 +46,41 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
 
     private static final String TAG = "LoginActivity";
+    private static boolean userListLisenerSetedUp = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Globals.initializeAppGlobals();
+
+        if (Globals.cinemaRepository == null) {
+            AppDatabase appDatabase = AppDatabase.getAppDatabase(getApplicationContext());
+            Globals.cinemaRepository = new CinemaRepository(appDatabase);
+            Globals.movieRepository = new MovieRepository(appDatabase);
+            Globals.associationRepository = new AssociationRepository(appDatabase);
+            Globals.userRepository = new UserRepository(appDatabase);
+        }
+        setUpAssocListener();
 
         mAuth = FirebaseAuth.getInstance();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){
-                    startActivity(new Intent(LoginActivity.this, CinemaListActivity.class));
-                    finish();
+                    String userEmail = mAuth.getCurrentUser().getEmail();
+                    if (Globals.getUserByUsername(userEmail) == null){
+                        Globals.addUser(new User(null, userEmail, "normalUser"));
+                        startActivity(new Intent(LoginActivity.this, CinemaListActivityForSimpleUser.class));
+                        finish();
+                    } else if (Globals.getUserByUsername(userEmail).getRole().equals("admin")) {
+                        startActivity(new Intent(LoginActivity.this, CinemaListActivity.class));
+                        finish();
+                    } else {
+                        startActivity(new Intent(LoginActivity.this, CinemaListActivityForSimpleUser.class));
+                        finish();
+                    }
                 }
             }
         };
@@ -123,5 +156,50 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private static void setUpAssocListener(){
+        if (userListLisenerSetedUp)
+            return;
+
+        final FirebaseDatabase database=FirebaseDatabase.getInstance();
+        DatabaseReference ref=database.getReference("server");
+        DatabaseReference userRef=ref.child("users");
+
+        userRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                User a=dataSnapshot.getValue(User.class);
+
+                if(Globals.getUserByKey(a.getFirebaseKey()) == null)
+                    Globals.userRepository.add(a);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                User newUser = dataSnapshot.getValue(User.class);
+                Globals.userRepository.update(newUser);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                for(int i=0;i<Globals.userRepository.getAll().size();i++)
+                    if(Globals.userRepository.getUser(i).getFirebaseKey().equals(dataSnapshot.getKey()))
+                        Globals.userRepository.delete(Globals.userRepository.getUser(i).getFirebaseKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        userListLisenerSetedUp = true;
     }
 }

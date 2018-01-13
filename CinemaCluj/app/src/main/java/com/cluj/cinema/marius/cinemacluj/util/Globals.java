@@ -3,9 +3,11 @@ package com.cluj.cinema.marius.cinemacluj.util;
 import com.cluj.cinema.marius.cinemacluj.model.Association;
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
+import com.cluj.cinema.marius.cinemacluj.model.User;
 import com.cluj.cinema.marius.cinemacluj.repository.AssociationRepository;
 import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
 import com.cluj.cinema.marius.cinemacluj.repository.MovieRepository;
+import com.cluj.cinema.marius.cinemacluj.repository.UserRepository;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -16,15 +18,60 @@ import java.util.List;
  */
 
 public class Globals {
-    private static DatabaseReference ref=FirebaseDatabase.getInstance().getReference("server");
-    private static DatabaseReference cinemaRef=ref.child("cinemas");
-    private static DatabaseReference movieRef=ref.child("movies");
-    private static DatabaseReference associationRef=ref.child("associations");
+    private static DatabaseReference ref;
+    private static DatabaseReference cinemaRef;
+    private static DatabaseReference movieRef;
+    private static DatabaseReference associationRef;
+    private static DatabaseReference userRef;
 
     public static CinemaRepository cinemaRepository = null;
     public static MovieRepository movieRepository = null;
     public static AssociationRepository associationRepository = null;
+    public static UserRepository userRepository = null;
 
+
+    private static boolean initialSetupMade = false;
+    public static void initializeAppGlobals(){
+        if (initialSetupMade)
+            return;
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+        ref=FirebaseDatabase.getInstance().getReference("server");
+        cinemaRef=ref.child("cinemas");
+        movieRef=ref.child("movies");
+        associationRef=ref.child("associations");
+        userRef=ref.child("users");
+        initialSetupMade = true;
+    }
+
+    public static User getUserByKey(String key){
+        return userRepository.getUserByKey(key);
+    }
+
+    public static User getUserByUsername(String username){
+        return userRepository.getUserByName(username);
+    }
+
+    public static User getUser(int index){
+        return userRepository.getUser(index);
+    }
+
+    public static void addUser(User user){
+        String key=userRef.push().getKey();
+        user.setFirebaseKey(key);
+        userRef.child(key).setValue(user);
+        userRepository.add(user);
+    }
+
+    public static void updateUser(User user){
+        userRef.child(user.getFirebaseKey()).setValue(user);
+        userRepository.update(user);
+    }
+
+    public static void removeUser(String key){
+        userRef.child(key).removeValue();
+        userRepository.delete(key);
+    }
 
     public static Cinema getCinemaByKey(String key){
         return cinemaRepository.getCinemaByKey(key);
