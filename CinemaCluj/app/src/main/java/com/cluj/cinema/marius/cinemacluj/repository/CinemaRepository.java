@@ -33,20 +33,6 @@ public class CinemaRepository {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-//        Cinema t1 = new Cinema();
-//        t1.setName("Cinema Marasti");
-//        t1.setAddress( "Strada Aurel Vlaicu 3");
-//        t1.setPhoneNumber("0264 598 784");
-//        Cinema t2 = new Cinema();
-//        t2.setName("Cinema Vicatoria");
-//        t2.setAddress("Bulevardul Eroilor 51");
-//        t2.setPhoneNumber("0264 450 143");
-//        Cinema t3 = new Cinema();
-//        t3.setName("Cinema Florin Piersic");
-//        t3.setAddress("Piata Mihai Viteazu 11");
-//        t3.setPhoneNumber("0264 433 477");
-//        add(t1);add(t2);add(t3);
     }
 
     public void add(final Cinema e) {
@@ -63,7 +49,7 @@ public class CinemaRepository {
     public void update(final Cinema e) {
         Cinema initialCinema = null;
         for(Cinema sl : repo) {
-            if(sl.getId() == e.getId()) {
+            if(sl.getFirebaseKey() == e.getFirebaseKey()) {
                 initialCinema = sl;
                 break;
             }
@@ -81,10 +67,10 @@ public class CinemaRepository {
         });
     }
 
-    public void delete(final Long id) {
+    public void delete(final String key) {
 
         for(Cinema sl : repo) {
-            if(sl.getId() == id) {
+            if(sl.getFirebaseKey() == key) {
                 repo.remove(sl);
                 final Cinema toDelete = sl;
                 executor.execute(new Runnable() {
@@ -102,9 +88,9 @@ public class CinemaRepository {
         return repo;
     }
 
-    public Cinema getCinemaById(final Long id) {
+    public Cinema getCinemaByKey(final String key) {
         for(Cinema p:repo) {
-            if(p.getId().equals(id)) {
+            if(p.getFirebaseKey().equals(key)) {
                 return p;
             }
         }

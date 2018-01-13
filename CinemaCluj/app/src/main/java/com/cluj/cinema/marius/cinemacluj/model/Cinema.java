@@ -3,6 +3,7 @@ package com.cluj.cinema.marius.cinemacluj.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 /**
  * Created by marius on 12/18/2017.
@@ -10,12 +11,11 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "cinema")
 public class Cinema {
 
-    @PrimaryKey(autoGenerate = true)
-    private Long id;
-
     private String name;
     private String address;
     private String phoneNumber;
+    @PrimaryKey
+    @NonNull
     private String firebaseKey;
 
     public String getFirebaseKey() {
@@ -27,11 +27,17 @@ public class Cinema {
     }
 
     public Cinema(String name, String address, String phoneNumber, String firebaseKey) {
-        this.id = id;
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.firebaseKey = firebaseKey;
+    }
+
+    @Ignore
+    public Cinema(String name, String address, String phoneNumber) {
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
     }
 
     @Ignore
@@ -62,14 +68,6 @@ public class Cinema {
         this.phoneNumber = phoneNumber;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getListItemRepresentation(){
         return name + "\n" + address + "\n" + phoneNumber;
     }
@@ -80,7 +78,6 @@ public class Cinema {
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", id=" + id +
                 '}';
     }
 }

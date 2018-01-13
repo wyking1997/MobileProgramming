@@ -3,6 +3,7 @@ package com.cluj.cinema.marius.cinemacluj.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 /**
  * Created by marius on 11/2/2017.
@@ -10,17 +11,13 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "movie")
 public class Movie{
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    @PrimaryKey(autoGenerate = true)
-    private long id;
 
     private String year;
     private String title;
     private int duration;
     private String description;
+    @PrimaryKey
+    @NonNull
     private String firebaseKey;
 
     public String getFirebaseKey() {
@@ -32,7 +29,6 @@ public class Movie{
     }
 
     public Movie(String year, String title, int duration, String description, String firebaseKey) {
-        this.id = id;
         this.year = year;
         this.title = title;
         this.duration = duration;
@@ -73,10 +69,6 @@ public class Movie{
         return result;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getYear() {
         return year;
     }
@@ -113,6 +105,8 @@ public class Movie{
     public String getListItemRepresentation(){
         return this.title + " " + this.year + "\n" + this.duration + " minutes";
     }
+
+
 }
 
 

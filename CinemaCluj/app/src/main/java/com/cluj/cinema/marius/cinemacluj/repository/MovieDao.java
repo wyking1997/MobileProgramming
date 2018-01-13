@@ -19,8 +19,8 @@ public interface MovieDao {
     @Query("SELECT * FROM movie")
     List<Movie> getAll();
 
-    @Query("SELECT * FROM movie where id = :id")
-    Movie getMovieById(Long id);
+    @Query("SELECT * FROM movie where firebaseKey = :key")
+    Movie getMovieById(String key);
 
     @Insert
     void insertAll(Movie... cinemas);

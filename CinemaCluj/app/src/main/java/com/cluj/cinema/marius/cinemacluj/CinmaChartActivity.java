@@ -33,14 +33,14 @@ public class CinmaChartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cinma_chart);
 
         Map<String, Integer> arr = new HashMap<>();
-        long cinema_id = getIntent().getLongExtra("cinema_id", -1);
+        String cinema_key = getIntent().getStringExtra("cinema_key");
         List<Association> ls = new ArrayList<>();
-        for (Association a : Globals.getASSOCS()){
-            if (cinema_id == a.getCinema_id()) {
+        for (Association a : Globals.getAssociations()){
+            if (cinema_key == a.getCinemaKey()) {
                 Association as = new Association();
                 as.setDate(a.getDate());
-                as.setCinema_id(a.getCinema_id());
-                as.setMovie_id(a.getMovie_id());
+                as.setCinemaKey(a.getCinemaKey());
+                as.setMovieKey(a.getMovieKey());
                 ls.add(as);
             }
         }
@@ -52,8 +52,8 @@ public class CinmaChartActivity extends AppCompatActivity {
                 if (compareDates(ls.get(i).getDate(), ls.get(i + 1).getDate()) == 1){
                     Association as = new Association();
                     as.setDate(ls.get(i).getDate());ls.get(i).setDate(ls.get(i + 1).getDate());ls.get(i + 1).setDate(as.getDate());
-                    as.setMovie_id(ls.get(i).getMovie_id());ls.get(i).setMovie_id(ls.get(i + 1).getMovie_id());ls.get(i + 1).setMovie_id(as.getMovie_id());
-                    as.setCinema_id(ls.get(i).getCinema_id());ls.get(i).setCinema_id(ls.get(i + 1).getCinema_id());ls.get(i + 1).setCinema_id(as.getCinema_id());
+                    as.setMovieKey(ls.get(i).getMovieKey());ls.get(i).setMovieKey(ls.get(i + 1).getMovieKey());ls.get(i + 1).setMovieKey(as.getMovieKey());
+                    as.setCinemaKey(ls.get(i).getCinemaKey());ls.get(i).setCinemaKey(ls.get(i + 1).getCinemaKey());ls.get(i + 1).setCinemaKey(as.getCinemaKey());
                     flag = false;
                 }
         } while (!flag);

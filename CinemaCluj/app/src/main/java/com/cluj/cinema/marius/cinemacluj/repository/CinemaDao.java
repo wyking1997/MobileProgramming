@@ -20,8 +20,8 @@ public interface CinemaDao {
     @Query("SELECT * FROM cinema")
     List<Cinema> getAll();
 
-    @Query("SELECT * FROM cinema where id = :id")
-    Cinema getCinemaById(Long id);
+    @Query("SELECT * FROM cinema where firebaseKey = :firebaseKey")
+    Cinema getCinemaById(String firebaseKey);
 
     @Insert
     void insertAll(Cinema... cinemas);

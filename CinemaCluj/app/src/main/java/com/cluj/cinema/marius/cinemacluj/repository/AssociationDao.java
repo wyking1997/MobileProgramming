@@ -19,8 +19,8 @@ public interface AssociationDao {
     @Query("SELECT * FROM assoc")
     List<Association> getAll();
 
-    @Query("SELECT * FROM assoc where id = :id")
-    Association getMovieById(Long id);
+    @Query("SELECT * FROM assoc where firebaseKey = :key")
+    Association getMovieByKey(String key);
 
     @Insert
     void insertAll(Association... assocs);
@@ -28,7 +28,6 @@ public interface AssociationDao {
 
     @Delete
     void delete(Association assoc);
-
 
     @Update
     void update(Association assoc);

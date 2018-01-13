@@ -33,7 +33,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
 
         position = getIntent().getIntExtra(MovieListActivity.EXTRA_MOVIE_POSITION_IN_LIST, -1);
-        movie = Globals.getMOVIE(position);
+        movie = Globals.getMovie(position);
 
         EditText titleText = (EditText) findViewById(R.id.titleTextAdd);
         TextView yearText = (TextView) findViewById(R.id.tvDate);
@@ -103,7 +103,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             returnIntent.putExtra("year",year);
             returnIntent.putExtra("duration",duration);
             returnIntent.putExtra("title",titleText.getText() + "");
-            returnIntent.putExtra("id", this.movie.getId());
+            returnIntent.putExtra("key", this.movie.getFirebaseKey());
             returnIntent.putExtra("action", MovieListActivity.ACTION_UPDATE);
             setResult(Activity.RESULT_OK,returnIntent);
             finish();
@@ -124,7 +124,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Intent result = new Intent();
                 result.putExtra("action", MovieListActivity.ACTION_DELETE);
-                result.putExtra("id", movie.getId());
+                result.putExtra("key", movie.getFirebaseKey());
                 setResult(Activity.RESULT_OK, result);
                 finish();
             }

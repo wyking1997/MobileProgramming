@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.cluj.cinema.marius.cinemacluj.model.Association;
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
 import com.cluj.cinema.marius.cinemacluj.repository.AppDatabase;
 import com.cluj.cinema.marius.cinemacluj.repository.AssociationRepository;
@@ -19,9 +20,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.microedition.khronos.opengles.GL;
 
 public class CinemaListActivity extends AppCompatActivity {
 
@@ -36,9 +44,14 @@ public class CinemaListActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleSignInClient mGoogleSignInClient;
+    private boolean cinemaListLisenerSetedUp = false;
+    private boolean assocListLisenerSetedUp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cinema_list);
 
@@ -85,6 +98,10 @@ public class CinemaListActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(list.getContext(),
                 android.R.layout.simple_list_item_1, titles);
         list.setAdapter(adapter);
+
+        setUpCinemaListener();
+        setUpMovieListener();
+        setUpAssocListener();
     }
 
     public void goToMovieList(View view){
@@ -92,4 +109,107 @@ public class CinemaListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void setUpCinemaListener(){
+        if (cinemaListLisenerSetedUp)
+            return;
+        final FirebaseDatabase database=FirebaseDatabase.getInstance();
+        DatabaseReference ref=database.getReference("server");
+        DatabaseReference bookRef=ref.child("cinemas");
+
+        bookRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Cinema c=dataSnapshot.getValue(Cinema.class);
+
+                if(Globals.getCinemaByKey(c.getFirebaseKey()) == null){
+                    Globals.cinemaRepository.add(c);
+                    titles.add(c.getListItemRepresentation());
+                    adapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Cinema newCinema = dataSnapshot.getValue(Cinema.class);
+                titles.remove(Globals.getCinemaByKey(newCinema.getFirebaseKey()).getListItemRepresentation());
+                Globals.updateCinema(newCinema);
+                titles.add(newCinema.getListItemRepresentation());
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                for(int i=0;i<Globals.cinemaRepository.getAll().size();i++){
+                    if(Globals.cinemaRepository.getCinema(i).getFirebaseKey().equals(dataSnapshot.getKey())){
+                        Globals.cinemaRepository.delete(Globals.cinemaRepository.getCinema(i).getFirebaseKey());
+                        titles.remove(i);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        cinemaListLisenerSetedUp = true;
+    }
+
+    private void setUpMovieListener(){
+        MovieListActivity.setUpMovieListener();
+    }
+
+    private void setUpAssocListener(){
+        if (assocListLisenerSetedUp)
+            return;
+
+        final FirebaseDatabase database=FirebaseDatabase.getInstance();
+        DatabaseReference ref=database.getReference("server");
+        DatabaseReference bookRef=ref.child("associations");
+
+        bookRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Association a=dataSnapshot.getValue(Association.class);
+
+                if(Globals.getAssociationByKey(a.getFirebaseKey()) == null)
+                    Globals.associationRepository.add(a);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Association newAssociation = dataSnapshot.getValue(Association.class);
+                Globals.updateAssociation(newAssociation);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                for(int i=0;i<Globals.associationRepository.getAll().size();i++)
+                    if(Globals.associationRepository.getAssociation(i).getFirebaseKey().equals(dataSnapshot.getKey()))
+                        Globals.associationRepository.delete(Globals.associationRepository.getAssociation(i).getFirebaseKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        assocListLisenerSetedUp = true;
+    }
 }

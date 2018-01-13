@@ -3,6 +3,7 @@ package com.cluj.cinema.marius.cinemacluj.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 /**
  * Created by marius on 12/18/2017.
@@ -11,11 +12,11 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "assoc")
 public class Association {
 
-    @PrimaryKey(autoGenerate = true)
-    private Long id;
-    private Long cinema_id;
-    private Long movie_id;
+    private String cinemaKey;
+    private String movieKey;
     private String date;
+    @PrimaryKey
+    @NonNull
     private String firebaseKey;
 
     public String getFirebaseKey() {
@@ -26,9 +27,17 @@ public class Association {
         this.firebaseKey = firebaseKey;
     }
 
-    public Association(Long cinema_id, Long movie_id, String date) {
-        this.cinema_id = cinema_id;
-        this.movie_id = movie_id;
+    public Association(String cinemaKey, String movieKey, String date, String firebaseKey) {
+        this.cinemaKey = cinemaKey;
+        this.movieKey = movieKey;
+        this.date = date;
+        this.firebaseKey = firebaseKey;
+    }
+
+    @Ignore
+    public Association(String cinemaKey, String movieKey, String date) {
+        this.cinemaKey = cinemaKey;
+        this.movieKey = movieKey;
         this.date = date;
     }
 
@@ -36,42 +45,24 @@ public class Association {
     public Association() {
     }
 
-    public Long getId() {
-        return id;
+    public String getCinemaKey() {
+        return cinemaKey;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCinemaKey(String cinemaKey) {
+        this.cinemaKey = cinemaKey;
     }
 
-    public Long getCinema_id() {
-        return cinema_id;
+    public String getMovieKey() {
+        return movieKey;
     }
 
-    public void setCinema_id(Long cinema_id) {
-        this.cinema_id = cinema_id;
-    }
-
-    public Long getMovie_id() {
-        return movie_id;
-    }
-
-    public void setMovie_id(Long movie_id) {
-        this.movie_id = movie_id;
+    public void setMovieKey(String movieKey) {
+        this.movieKey = movieKey;
     }
 
     public String getDate() {
         return date;
-    }
-
-    @Override
-    public String toString() {
-        return "Association{" +
-                "id=" + id +
-                ", cinema_id=" + cinema_id +
-                ", movie_id=" + movie_id +
-                ", date='" + date + '\'' +
-                '}';
     }
 
     public void setDate(String date) {

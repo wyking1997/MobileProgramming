@@ -1,15 +1,14 @@
 package com.cluj.cinema.marius.cinemacluj.util;
 
-import com.cluj.cinema.marius.cinemacluj.firebase.FirebaseService;
 import com.cluj.cinema.marius.cinemacluj.model.Association;
 import com.cluj.cinema.marius.cinemacluj.model.Cinema;
 import com.cluj.cinema.marius.cinemacluj.model.Movie;
 import com.cluj.cinema.marius.cinemacluj.repository.AssociationRepository;
 import com.cluj.cinema.marius.cinemacluj.repository.CinemaRepository;
 import com.cluj.cinema.marius.cinemacluj.repository.MovieRepository;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,19 +16,21 @@ import java.util.List;
  */
 
 public class Globals {
+    private static DatabaseReference ref=FirebaseDatabase.getInstance().getReference("server");
+    private static DatabaseReference cinemaRef=ref.child("cinemas");
+    private static DatabaseReference movieRef=ref.child("movies");
+    private static DatabaseReference associationRef=ref.child("associations");
 
     public static CinemaRepository cinemaRepository = null;
     public static MovieRepository movieRepository = null;
     public static AssociationRepository associationRepository = null;
-    public static FirebaseService firebaseService = new FirebaseService();
 
 
-
-    public static Cinema getCINEMA(Long id){
-        return cinemaRepository.getCinemaById(id);
+    public static Cinema getCinemaByKey(String key){
+        return cinemaRepository.getCinemaByKey(key);
     }
 
-    public static List<Cinema> getCINEMAS(){
+    public static List<Cinema> getCinemas(){
         return cinemaRepository.getAll();
     }
 
@@ -38,69 +39,77 @@ public class Globals {
     }
 
     public static void addCinema(Cinema cinema){
-        firebaseService.addCinema(cinema);
+        String key=cinemaRef.push().getKey();
+        cinema.setFirebaseKey(key);
+        cinemaRef.child(key).setValue(cinema);
         cinemaRepository.add(cinema);
     }
 
     public static void updateCinema(Cinema cinema){
-        firebaseService.updateCinema(cinema);
+        cinemaRef.child(cinema.getFirebaseKey()).setValue(cinema);
         cinemaRepository.update(cinema);
     }
 
-    public static void removeCinema(Long id){
-        firebaseService.deleteCinema(cinemaRepository.getCinemaById(id).getFirebaseKey());
-        cinemaRepository.delete(id);
+    public static void removeCinema(String key){
+        cinemaRef.child(key).removeValue();
+        cinemaRepository.delete(key);
     }
 
-
-
-
-    public static Movie getMOVIE(int index) {
+    public static Movie getMovie(int index) {
         return movieRepository.getMovie(index);
     }
 
-    public static List<Movie> getMOVIES(){
+    public static Movie getMovieByKey(String key){
+        return movieRepository.getMovieByKey(key);
+    }
+
+    public static List<Movie> getMovies(){
         return movieRepository.getAll();
     }
 
-    public static void removeMovie(long id){
-        firebaseService.deleteMovie(movieRepository.getMovieById(id).getFirebaseKey());
-        movieRepository.delete(id);
+    public static void removeMovie(String key){
+        movieRef.child(key).removeValue();
+        movieRepository.delete(key);
     }
 
     public static void addMovie(Movie movie){
-        firebaseService.addMovie(movie);
+        String key = movieRef.push().getKey();
+        movie.setFirebaseKey(key);
+        movieRef.child(key).setValue(movie);
         movieRepository.add(movie);
     }
 
     public static void updateMovie(Movie movie){
-        firebaseService.updateMovie(movie);
+        movieRef.child(movie.getFirebaseKey()).setValue(movie);
         movieRepository.update(movie);
     }
 
-
-
-
-    public static Association getASSOC(int index) {
+    public static Association getAssociation(int index) {
         return associationRepository.getAssociation(index);
     }
 
-    public static List<Association> getASSOCS() {
+    public static Association getAssociationByKey(String key){
+        return associationRepository.getAssociationByKey(key);
+    }
+
+    public static List<Association> getAssociations() {
         return associationRepository.getAll();
     }
 
-    public static void addAssoc(Association association){
-        firebaseService.addAssociation(association);
+    public static void addAssocation(Association association){
+        String key=associationRef.push().getKey();
+        association.setFirebaseKey(key);
+        associationRef.child(key).setValue(association);
         associationRepository.add(association);
     }
 
-    public static void removeAssociation(long id){
-        firebaseService.deleteAssociation(associationRepository.getAssociationById(id).getFirebaseKey());
-        associationRepository.delete(id);
+    public static void removeAssociation(String key){
+        associationRef.child(key).removeValue();
+        associationRepository.delete(key);
     }
 
-    public static void updateAssoc(Association association){
-        firebaseService.updateAssociation(association);
+    public static void updateAssociation(Association association){
+        associationRef.child(association.getFirebaseKey()).setValue(association);
         associationRepository.update(association);
     }
 }
