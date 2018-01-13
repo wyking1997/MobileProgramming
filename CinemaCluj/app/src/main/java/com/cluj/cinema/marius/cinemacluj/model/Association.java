@@ -1,6 +1,7 @@
 package com.cluj.cinema.marius.cinemacluj.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
@@ -15,6 +16,25 @@ public class Association {
     private Long cinema_id;
     private Long movie_id;
     private String date;
+    private String firebaseKey;
+
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
+
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
+    }
+
+    public Association(Long cinema_id, Long movie_id, String date) {
+        this.cinema_id = cinema_id;
+        this.movie_id = movie_id;
+        this.date = date;
+    }
+
+    @Ignore
+    public Association() {
+    }
 
     public Long getId() {
         return id;

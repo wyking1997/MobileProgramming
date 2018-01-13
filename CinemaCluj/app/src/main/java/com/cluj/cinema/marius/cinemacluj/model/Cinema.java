@@ -1,6 +1,7 @@
 package com.cluj.cinema.marius.cinemacluj.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
@@ -15,8 +16,25 @@ public class Cinema {
     private String name;
     private String address;
     private String phoneNumber;
+    private String firebaseKey;
 
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
 
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
+    }
+
+    public Cinema(String name, String address, String phoneNumber, String firebaseKey) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.firebaseKey = firebaseKey;
+    }
+
+    @Ignore
     public Cinema() {
     }
 

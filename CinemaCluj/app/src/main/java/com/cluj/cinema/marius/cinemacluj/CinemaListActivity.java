@@ -67,6 +67,7 @@ public class CinemaListActivity extends AppCompatActivity {
     }
 
     public void goToMovieList(View view){
-        finish();
+        Intent intent = new Intent(this, MovieListActivity.class);
+        startActivity(intent);
     }
 }

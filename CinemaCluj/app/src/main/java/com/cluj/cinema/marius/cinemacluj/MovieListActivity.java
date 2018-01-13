@@ -71,8 +71,7 @@ public class MovieListActivity extends ListActivity {
     }
 
     public void goToCinemasList(View view){
-        Intent intent = new Intent(this, CinemaListActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     @Override
