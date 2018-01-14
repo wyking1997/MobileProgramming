@@ -20,12 +20,14 @@ export default class Login extends Component {
                     style={{width: "80%", borderWidth: 1, backgroundColor: 'white'}}
                     onChangeText={(email) => this.email = email}
                     placeholder={mail}
+                    value={mail}
                 />
                 <TextInput
                     style={{width: "80%", borderWidth: 1, backgroundColor: 'white'}}
                     onChangeText={(password) => this.password = password}
                     secureTextEntry={true}
                     placeholder={pass}
+                    value={pass}
                 />
                 <Button
                     title="Log in"

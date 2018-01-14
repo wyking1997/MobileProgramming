@@ -54,9 +54,6 @@ export default class App extends Component<{}> {
         this.setCinemaDetailForNormalUser = this.setCinemaDetailForNormalUser.bind(this);
         this.setCinemaListViewForNormalUser = this.setCinemaListViewForNormalUser.bind(this);
 
-        this.getListOfCinemasHardCode = this.getListOfCinemasHardCode.bind(this);
-        this.getListOfFilmsHardCode = this.getListOfFilmsHardCode.bind(this);
-        this.getAssociationsHardCode = this.getAssociationsHardCode.bind(this);
         this.getLoginComponent = this.getLoginComponent.bind(this);
         this.loginSuccess = this.loginSuccess.bind(this);
         this.getCinemasListElementForNonAdminUser = this.getCinemasListElementForNonAdminUser.bind(this);
@@ -68,32 +65,43 @@ export default class App extends Component<{}> {
         this.state = {movies: [], cinemas: [], associations: [], element: element, curr_comp: "login"};
 
         const secondThis = this;
-        AsyncStorage.getItem('associations').then(x => {
-            if (x != undefined){
-                secondThis.setState({associations: JSON.parse(x)});
-        }});
-
-        AsyncStorage.getItem('cinemas').then(x => {
-            if (x == undefined){
-                let cinemas = JSON.stringify(secondThis.getListOfCinemas());
-                AsyncStorage.setItem('cinemas', cinemas);
-                AsyncStorage.setItem('idCinema', '3');
-                // secondThis.setState({cinemas: this.getListOfCinemas()});
-            } else if (this.state.curr_comp == "cinemaList") {
-                secondThis.setState({cinemas: JSON.parse(x), element: secondThis.getCinemasListElement(JSON.parse(x))});
-            } else
-                secondThis.setState({cinemas: JSON.parse(x)});
-        });
-        AsyncStorage.getItem('movies').then(x => {
-            if (x == undefined){
-                AsyncStorage.setItem('movies', JSON.stringify([]));
-                AsyncStorage.setItem('id', '0');
-                secondThis.setState({movies: JSON.parse(x), element: secondThis.getMovieListElement(JSON.parse(x))});
-            } else if (this.state.curr_comp == "movieList")
-                secondThis.setState({movies: JSON.parse(x), element: secondThis.getMovieListElement(JSON.parse(x))});
+        firebase.database().ref('movies').on('value', (dataSnapshot)=>{
+            const x = dataSnapshot.val();
+            const ls = [];
+            for(var propt in x) ls.push(x[propt]);
+            if (secondThis.state.curr_comp != "movieList")
+                secondThis.setState({movies: ls});
             else
-                secondThis.setState({movies: JSON.parse(x)})
+                secondThis.setState({movies: ls, element: secondThis.getMovieListElement(ls)});
         });
+
+        // const secondThis = this;
+        // AsyncStorage.getItem('associations').then(x => {
+        //     if (x != undefined){
+        //         secondThis.setState({associations: JSON.parse(x)});
+        // }});
+        //
+        // AsyncStorage.getItem('cinemas').then(x => {
+        //     if (x == undefined){
+        //         let cinemas = JSON.stringify(secondThis.getListOfCinemas());
+        //         AsyncStorage.setItem('cinemas', cinemas);
+        //         AsyncStorage.setItem('idCinema', '3');
+        //         // secondThis.setState({cinemas: this.getListOfCinemas()});
+        //     } else if (this.state.curr_comp == "cinemaList") {
+        //         secondThis.setState({cinemas: JSON.parse(x), element: secondThis.getCinemasListElement(JSON.parse(x))});
+        //     } else
+        //         secondThis.setState({cinemas: JSON.parse(x)});
+        // });
+        // AsyncStorage.getItem('movies').then(x => {
+        //     if (x == undefined){
+        //         AsyncStorage.setItem('movies', JSON.stringify([]));
+        //         AsyncStorage.setItem('id', '0');
+        //         secondThis.setState({movies: JSON.parse(x), element: secondThis.getMovieListElement(JSON.parse(x))});
+        //     } else if (this.state.curr_comp == "movieList")
+        //         secondThis.setState({movies: JSON.parse(x), element: secondThis.getMovieListElement(JSON.parse(x))});
+        //     else
+        //         secondThis.setState({movies: JSON.parse(x)})
+        // });
     }
 
 
@@ -111,7 +119,7 @@ export default class App extends Component<{}> {
     }
 
     loginSuccess(email){
-        if (email == "marius.comiati97@gmail.com")
+        if (email == "t@test.gmail")
             this.setCinemaListView();
         else {
             this.setCinemaListViewForNormalUser();
@@ -189,7 +197,7 @@ export default class App extends Component<{}> {
         return (<CinemaDetailComponent cinema={cinema} chartData={assoc} onComeBack={() => {this.setCinemaListView()}} />);
     }
     getCinemasListElement(cinemas){
-        myCinemas = this.getCinemaForFlatList(cinemas);
+        myCinemas = cinemas;
         return (<View style={styles.mainView}>
             <FlatList
                 style={styles.listView}
@@ -215,8 +223,8 @@ export default class App extends Component<{}> {
         </View>);
     }
     getCinemaForFlatList(list){
-        list.map(x => x.key = x.id);
-        return list;
+        // list.map(x => x.key = x.key);
+        // return list;
     }
 
 
@@ -240,16 +248,32 @@ export default class App extends Component<{}> {
 
     handleAddNewMovie(movie){
         let tt = this;
-        AsyncStorage.getItem("id").then(v =>{
-            movie.id = parseInt(v);
-            newMovies = tt.state.movies.concat(movie);
-            AsyncStorage.setItem('movies',JSON.stringify(newMovies));
-            AsyncStorage.setItem('id', (parseInt(v) + 1) + "");
-            this.setState({
-                movies: newMovies,
-                element: this.getMovieListElement(newMovies)
-            });
+
+        let key = firebase.database().ref().child('movies').push().key;
+        firebase.database().ref('movies').child(key).update({
+            key: key,
+            title: movie.title,
+            date: movie.date,
+            duration: movie.duration,
+            description: movie.description
         });
+
+        movie.key = key;
+        newMovies = tt.state.movies.concat(movie);
+        this.setState({
+            movies: newMovies,
+            element: this.getMovieListElement(newMovies)
+        });
+        // AsyncStorage.getItem("id").then(v =>{
+        //     movie.id = parseInt(v);
+        //     newMovies = tt.state.movies.concat(movie);
+        //     AsyncStorage.setItem('movies',JSON.stringify(newMovies));
+        //     AsyncStorage.setItem('id', (parseInt(v) + 1) + "");
+        //     this.setState({
+        //         movies: newMovies,
+        //         element: this.getMovieListElement(newMovies)
+        //     });
+        // });
     }
 
     handleUpdate(movie){
@@ -266,8 +290,8 @@ export default class App extends Component<{}> {
         this.setState({movies: newMovies, element: this.getMovieListElement(newMovies)});
     }
 
-    setDetailView(movieId){
-        movie = this.state.movies.find(m => m.id === movieId);
+    setDetailView(movieKey){
+        movie = this.state.movies.find(m => m.key === movieKey);
         newElement = this.getMovieDetailComponent(movie)
         this.setState({element: newElement});
     }
@@ -281,13 +305,13 @@ export default class App extends Component<{}> {
     }
 
     getMovieListElement(movies){
-        myMovies = this.getMovieForFlatList(movies);
+        myMovies = movies;
         return (<View style={styles.mainView}>
             <FlatList
                 style={styles.listView}
                 data={myMovies}
                 renderItem={({item}) =>
-                    <TouchableHighlight onPress={() => {this.setDetailView(item.id)}} underlayColor="azure">
+                    <TouchableHighlight onPress={() => {this.setDetailView(item.key)}} underlayColor="azure">
                         <View style={styles.listItemView}>
                             <Text style={styles.bigBlack}>
                                 {item.title + " " + item.date + "\n" + item.duration + " minutes"}
@@ -322,8 +346,8 @@ export default class App extends Component<{}> {
     }
 
     getMovieForFlatList(list){
-        list.map(x => x.key = x.id);
-        return list;
+        // list.map(x => x.key = x.id);
+        // return list;
     }
 
 
@@ -333,71 +357,6 @@ export default class App extends Component<{}> {
 
 
 
-
-
-
-
-
-
-    initializeData(){
-        cinemas = this.getListOfCinemas();
-        movies = this.getListOfFilms();
-        associations = this.getAssociations();
-        AsyncStorage.setItem('cinemas',JSON.stringify(cinemas));
-        AsyncStorage.setItem('movies',JSON.stringify(movies));
-        AsyncStorage.setItem('associations',JSON.stringify(associations));
-    }
-
-    getListOfCinemasHardCode(){
-        return [
-            {id: 0, name: "Cinema Marasti", adress: "Strada Aurel Vlaicu 3", phoneNumber: "0264 598 784"},
-            {id: 1, name: "Cinema Victoria", adress: "Bulevardul Eroilor 51", phoneNumber: "0264 450 143"},
-            {id: 2, name: "Cinema Florin Piersic", adress: "Piața Mihai Viteazu 11", phoneNumber: "0264 433 477"}
-        ];
-    }
-
-    getListOfFilmsHardCode(){
-        return [
-            {id: 0, date: '1995-02-21', title: "Piratii din caraibe", duration: 95, description: "betiv norocos"},
-            {id: 1, date: '2010-06-15', title: "Omul paianjen", duration: 80, description: "This is with benner!"},
-            {id: 2, date: '2014-02-16', title: "Thor", duration: 115, description: "big green animal"},
-            {id: 3, date: '2011-11-02', title: "Neinfricata", duration: 65, description: "roscata si trage cu arcul"},
-            {id: 4, date: '2017-01-01', title: "Minionii 3", duration: 87, description: "galbeni si multi 1"},
-        ];
-    }
-
-    getAssociationsHardCode(){
-        return [
-            {id: 0, cinema_id: 0, movie_id: 0, date: '2017-12-01'},
-            {id: 1, cinema_id: 0, movie_id: 0, date: '2017-12-02'},
-            {id: 2, cinema_id: 0, movie_id: 0, date: '2017-12-03'},
-            {id: 3, cinema_id: 0, movie_id: 2, date: '2017-12-02'},
-            {id: 4, cinema_id: 0, movie_id: 2, date: '2017-12-03'},
-            {id: 5, cinema_id: 0, movie_id: 3, date: '2017-12-03'},
-            {id: 6, cinema_id: 0, movie_id: 4, date: '2017-12-01'},
-            {id: 7, cinema_id: 0, movie_id: 4, date: '2017-12-02'},
-            {id: 8, cinema_id: 0, movie_id: 4, date: '2017-12-03'},
-            {id: 9, cinema_id: 1, movie_id: 1, date: '2017-12-01'},
-            {id: 10, cinema_id: 1, movie_id: 1, date: '2017-12-01'},
-            {id: 11, cinema_id: 1, movie_id: 1, date: '2017-12-02'},
-            {id: 12, cinema_id: 1, movie_id: 1, date: '2017-12-02'},
-            {id: 13, cinema_id: 1, movie_id: 1, date: '2017-12-03'},
-            {id: 14, cinema_id: 1, movie_id: 1, date: '2017-12-04'},
-            {id: 15, cinema_id: 1, movie_id: 2, date: '2017-12-02'},
-            {id: 16, cinema_id: 1, movie_id: 2, date: '2017-12-04'},
-            {id: 17, cinema_id: 2, movie_id: 0, date: '2017-12-01'},
-            {id: 18, cinema_id: 2, movie_id: 0, date: '2017-12-02'},
-            {id: 19, cinema_id: 2, movie_id: 3, date: '2017-12-02'},
-            {id: 20, cinema_id: 2, movie_id: 3, date: '2017-12-02'},
-            {id: 21, cinema_id: 2, movie_id: 3, date: '2017-12-03'},
-            {id: 22, cinema_id: 2, movie_id: 3, date: '2017-12-01'},
-            {id: 23, cinema_id: 2, movie_id: 3, date: '2017-12-01'},
-            {id: 24, cinema_id: 2, movie_id: 4, date: '2017-12-01'},
-            {id: 25, cinema_id: 2, movie_id: 4, date: '2017-12-02'},
-            {id: 26, cinema_id: 2, movie_id: 4, date: '2017-12-03'},
-            {id: 27, cinema_id: 2, movie_id: 4, date: '2017-12-04'}
-        ];
-    }
 
 
 
