@@ -26,7 +26,7 @@ export default class MovieDetailComponent extends Component<{}>{
 
     handleUpdate(){
         this.props.onUpdate({
-            id: this.props.movie.id,
+            key: this.props.movie.key,
             title: this.state.title,
             date: this.state.date,
             duration: this.state.duration,
@@ -35,7 +35,15 @@ export default class MovieDetailComponent extends Component<{}>{
     }
 
     handleDelete(){
-
+        Alert.alert(
+            'Movie removal',
+            'Are you sure you want to remove this movie?',
+            [
+                {text: 'Revoke', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'OK', onPress: () => this.props.onDelete(this.props.movie.key)},
+            ],
+            { cancelable: false }
+        )
     }
 
     render(){

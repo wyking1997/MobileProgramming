@@ -74,6 +74,22 @@ export default class App extends Component<{}> {
             else
                 secondThis.setState({movies: ls, element: secondThis.getMovieListElement(ls)});
         });
+        firebase.database().ref('cinemas').on('value', (dataSnapshot)=>{
+            const x = dataSnapshot.val();
+            const ls = [];
+            for(var propt in x) ls.push(x[propt]);
+            if (secondThis.state.curr_comp != "cinemaList")
+                secondThis.setState({cinemas: ls});
+            else
+                secondThis.setState({cinemas: ls, element: secondThis.getCinemasListElement(ls)});
+        });
+        firebase.database().ref('associations').on('value', (dataSnapshot)=>{
+            const x = dataSnapshot.val();
+            const ls = [];
+            for(var propt in x) ls.push(x[propt]);
+            secondThis.setState({associations: ls});
+        });
+
 
         // const secondThis = this;
         // AsyncStorage.getItem('associations').then(x => {
@@ -139,24 +155,24 @@ export default class App extends Component<{}> {
         let el = this.getCinemasListElementForNonAdminUser(this.state.cinemas);
         this.setState({element: el, curr_comp: "scinema_list"})
     }
-    setCinemaDetailForNormalUser(cinemaId){
-        cinema = this.state.cinemas.find(m => m.id === cinemaId);
+    setCinemaDetailForNormalUser(cinemaKey){
+        cinema = this.state.cinemas.find(m => m.key === cinemaKey);
         newElement = this.getCinemaDetailComponentForSimpleUser(cinema)
         this.setState({element: newElement});
     }
     getCinemaDetailComponentForSimpleUser(cinema){
         let assoc = this.state.associations;
-        assoc = assoc.filter(x => x.cinema_id == cinema.id);
+        assoc = assoc.filter(x => x.cinema_key == cinema.key);
         return (<CinemaDetailComponent cinema={cinema} chartData={assoc} onComeBack={() => {this.setCinemaListViewForNormalUser()}} />);
     }
     getCinemasListElementForNonAdminUser(cinemas){
-        myCinemas = this.getCinemaForFlatList(cinemas);
+        myCinemas = cinemas;
         return (<View style={styles.mainView}>
             <FlatList
                 style={styles.listView}
                 data={myCinemas}
                 renderItem={({item}) =>
-                    <TouchableHighlight onPress={() => {this.setCinemaDetailForNormalUser(item.id)}} underlayColor="azure">
+                    <TouchableHighlight onPress={() => {this.setCinemaDetailForNormalUser(item.key)}} underlayColor="azure">
                         <View style={styles.listItemView}>
                             <Text style={styles.bigBlack}>
                                 {item.name + "\n" + item.adress + "\n" + item.phoneNumber}
@@ -183,8 +199,8 @@ export default class App extends Component<{}> {
     setCinemaListView(){
         this.setState({element: this.getCinemasListElement(this.state.cinemas), curr_comp: "cinemaList"});
     }
-    setCinemaDetailView(cinemaId){
-        cinema = this.state.cinemas.find(m => m.id === cinemaId);
+    setCinemaDetailView(cinemaKey){
+        cinema = this.state.cinemas.find(m => m.key === cinemaKey);
         newElement = this.getCinemaDetailComponent(cinema)
         this.setState({element: newElement});
     }
@@ -193,7 +209,7 @@ export default class App extends Component<{}> {
     }
     getCinemaDetailComponent(cinema){
         let assoc = this.state.associations;
-        assoc = assoc.filter(x => x.cinema_id == cinema.id);
+        assoc = assoc.filter(x => x.cinema_key == cinema.key);
         return (<CinemaDetailComponent cinema={cinema} chartData={assoc} onComeBack={() => {this.setCinemaListView()}} />);
     }
     getCinemasListElement(cinemas){
@@ -203,7 +219,7 @@ export default class App extends Component<{}> {
                 style={styles.listView}
                 data={myCinemas}
                 renderItem={({item}) =>
-                    <TouchableHighlight onPress={() => {this.setCinemaDetailView(item.id)}} underlayColor="azure">
+                    <TouchableHighlight onPress={() => {this.setCinemaDetailView(item.key)}} underlayColor="azure">
                         <View style={styles.listItemView}>
                             <Text style={styles.bigBlack}>
                                 {item.name + "\n" + item.adress + "\n" + item.phoneNumber}
@@ -278,14 +294,21 @@ export default class App extends Component<{}> {
 
     handleUpdate(movie){
         newMovies = this.state.movies;
-        newMovies[newMovies.findIndex(el => el.id === movie.id)] = movie;
-        AsyncStorage.setItem('movies',JSON.stringify(newMovies));
+        newMovies[newMovies.findIndex(el => el.key === movie.key)] = movie;
+        firebase.database().ref('movies').child(movie.key).update({
+            key: movie.key,
+            title: movie.title,
+            date: movie.date,
+            duration: movie.duration,
+            description: movie.description
+        });
         this.setState({movies: newMovies, element: this.getMovieListElement(newMovies)});
     }
 
-    handleDelete(movieId){
+    handleDelete(movieKey){
+        firebase.database().ref().child('movies').child(movieKey).remove();
         newMovies = this.state.movies;
-        newMovies = newMovies.filter(x => x.id != movieId);
+        newMovies = newMovies.filter(x => x.key != movieKey);
         AsyncStorage.setItem('movies',JSON.stringify(newMovies));
         this.setState({movies: newMovies, element: this.getMovieListElement(newMovies)});
     }

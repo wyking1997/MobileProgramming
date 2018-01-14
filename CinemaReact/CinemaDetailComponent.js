@@ -83,7 +83,7 @@ export default class CinemaDetailComponent extends Component<{}>{
     }
 
     render(){
-        mock_obj = this.testChartData();
+        let data = this.testChartData();
         return (
             <View style = {styles.mainView}>
                 <View>
@@ -119,7 +119,7 @@ export default class CinemaDetailComponent extends Component<{}>{
                     />
                 </View>
                 <View>
-                    <Bar data={this.state.chartData} options={this.options} accessorKey='v'/>
+                    <Bar data={data} options={this.options} accessorKey='v'/>
                 </View>
             </View>
         );
