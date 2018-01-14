@@ -35,6 +35,7 @@ export default class App extends Component<{}> {
         // login
         // movieList
         // createMovie
+        // scinema_list => cinema list for simple user
 
         this.setDetailView = this.setDetailView.bind(this);
         this.getMovieListElement = this.getMovieListElement.bind(this);
@@ -49,12 +50,16 @@ export default class App extends Component<{}> {
         this.getCinemaForFlatList = this.getCinemaForFlatList.bind(this);
         this.getCinemaDetailComponent = this.getCinemaDetailComponent.bind(this);
         this.setCreateNewCinema = this.setCreateNewCinema.bind(this);
+        this.getCinemaDetailComponentForSimpleUser = this.getCinemaDetailComponentForSimpleUser.bind(this);
+        this.setCinemaDetailForNormalUser = this.setCinemaDetailForNormalUser.bind(this);
+        this.setCinemaListViewForNormalUser = this.setCinemaListViewForNormalUser.bind(this);
 
         this.getListOfCinemasHardCode = this.getListOfCinemasHardCode.bind(this);
         this.getListOfFilmsHardCode = this.getListOfFilmsHardCode.bind(this);
         this.getAssociationsHardCode = this.getAssociationsHardCode.bind(this);
         this.getLoginComponent = this.getLoginComponent.bind(this);
         this.loginSuccess = this.loginSuccess.bind(this);
+        this.getCinemasListElementForNonAdminUser = this.getCinemasListElementForNonAdminUser.bind(this);
 
         // this.initializeData();
 
@@ -91,22 +96,248 @@ export default class App extends Component<{}> {
         });
     }
 
+
+
+
+
+
+
+
+
+
+
     getLoginComponent(){
         return <LoginComponent login={this.loginSuccess}/>;
     }
 
     loginSuccess(email){
-        Alert.alert(
-            'Loggeg in user',
-            email,
-            [
-                {text: 'Revoke', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                {text: 'OK', onPress: () => console.log('ok Pressed')},
-            ],
-            { cancelable: false }
-        )
-        this.setCinemaListView();
+        if (email == "marius.comiati97@gmail.com")
+            this.setCinemaListView();
+        else {
+            this.setCinemaListViewForNormalUser();
+        }
     }
+
+
+
+
+
+
+
+
+
+
+    setCinemaListViewForNormalUser(){
+        let el = this.getCinemasListElementForNonAdminUser(this.state.cinemas);
+        this.setState({element: el, curr_comp: "scinema_list"})
+    }
+    setCinemaDetailForNormalUser(cinemaId){
+        cinema = this.state.cinemas.find(m => m.id === cinemaId);
+        newElement = this.getCinemaDetailComponentForSimpleUser(cinema)
+        this.setState({element: newElement});
+    }
+    getCinemaDetailComponentForSimpleUser(cinema){
+        let assoc = this.state.associations;
+        assoc = assoc.filter(x => x.cinema_id == cinema.id);
+        return (<CinemaDetailComponent cinema={cinema} chartData={assoc} onComeBack={() => {this.setCinemaListViewForNormalUser()}} />);
+    }
+    getCinemasListElementForNonAdminUser(cinemas){
+        myCinemas = this.getCinemaForFlatList(cinemas);
+        return (<View style={styles.mainView}>
+            <FlatList
+                style={styles.listView}
+                data={myCinemas}
+                renderItem={({item}) =>
+                    <TouchableHighlight onPress={() => {this.setCinemaDetailForNormalUser(item.id)}} underlayColor="azure">
+                        <View style={styles.listItemView}>
+                            <Text style={styles.bigBlack}>
+                                {item.name + "\n" + item.adress + "\n" + item.phoneNumber}
+                            </Text>
+                        </View>
+                    </TouchableHighlight>
+                }
+            />
+        </View>);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    setCinemaListView(){
+        this.setState({element: this.getCinemasListElement(this.state.cinemas), curr_comp: "cinemaList"});
+    }
+    setCinemaDetailView(cinemaId){
+        cinema = this.state.cinemas.find(m => m.id === cinemaId);
+        newElement = this.getCinemaDetailComponent(cinema)
+        this.setState({element: newElement});
+    }
+    setCreateNewCinema(){
+
+    }
+    getCinemaDetailComponent(cinema){
+        let assoc = this.state.associations;
+        assoc = assoc.filter(x => x.cinema_id == cinema.id);
+        return (<CinemaDetailComponent cinema={cinema} chartData={assoc} onComeBack={() => {this.setCinemaListView()}} />);
+    }
+    getCinemasListElement(cinemas){
+        myCinemas = this.getCinemaForFlatList(cinemas);
+        return (<View style={styles.mainView}>
+            <FlatList
+                style={styles.listView}
+                data={myCinemas}
+                renderItem={({item}) =>
+                    <TouchableHighlight onPress={() => {this.setCinemaDetailView(item.id)}} underlayColor="azure">
+                        <View style={styles.listItemView}>
+                            <Text style={styles.bigBlack}>
+                                {item.name + "\n" + item.adress + "\n" + item.phoneNumber}
+                            </Text>
+                        </View>
+                    </TouchableHighlight>
+                }
+            />
+            <Button
+                title="Create New Cinema"
+                onPress={() => {this.setCreateNewCinema()}}
+            />
+            <Button
+                title="Go to see movies"
+                onPress={() => {this.setMovieListView()}}
+            />
+        </View>);
+    }
+    getCinemaForFlatList(list){
+        list.map(x => x.key = x.id);
+        return list;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    handleAddNewMovie(movie){
+        let tt = this;
+        AsyncStorage.getItem("id").then(v =>{
+            movie.id = parseInt(v);
+            newMovies = tt.state.movies.concat(movie);
+            AsyncStorage.setItem('movies',JSON.stringify(newMovies));
+            AsyncStorage.setItem('id', (parseInt(v) + 1) + "");
+            this.setState({
+                movies: newMovies,
+                element: this.getMovieListElement(newMovies)
+            });
+        });
+    }
+
+    handleUpdate(movie){
+        newMovies = this.state.movies;
+        newMovies[newMovies.findIndex(el => el.id === movie.id)] = movie;
+        AsyncStorage.setItem('movies',JSON.stringify(newMovies));
+        this.setState({movies: newMovies, element: this.getMovieListElement(newMovies)});
+    }
+
+    handleDelete(movieId){
+        newMovies = this.state.movies;
+        newMovies = newMovies.filter(x => x.id != movieId);
+        AsyncStorage.setItem('movies',JSON.stringify(newMovies));
+        this.setState({movies: newMovies, element: this.getMovieListElement(newMovies)});
+    }
+
+    setDetailView(movieId){
+        movie = this.state.movies.find(m => m.id === movieId);
+        newElement = this.getMovieDetailComponent(movie)
+        this.setState({element: newElement});
+    }
+
+    setMovieListView(){
+        this.setState({element: this.getMovieListElement(this.state.movies), curr_comp: "movieList"});
+    }
+
+    setCreateNewMovie(){
+        this.setState({element: this.getAddMovieComponent(), curr_comp: "createMovie"});
+    }
+
+    getMovieListElement(movies){
+        myMovies = this.getMovieForFlatList(movies);
+        return (<View style={styles.mainView}>
+            <FlatList
+                style={styles.listView}
+                data={myMovies}
+                renderItem={({item}) =>
+                    <TouchableHighlight onPress={() => {this.setDetailView(item.id)}} underlayColor="azure">
+                        <View style={styles.listItemView}>
+                            <Text style={styles.bigBlack}>
+                                {item.title + " " + item.date + "\n" + item.duration + " minutes"}
+                            </Text>
+                        </View>
+                    </TouchableHighlight>
+                }
+            />
+            <Button
+                title="Create New Movie"
+                onPress={() => {this.setCreateNewMovie()}}
+            />
+            <Button
+                title="Go to see cinemas"
+                onPress={() => {this.setCinemaListView()}}
+            />
+        </View>);
+    }
+    getMovieDetailComponent(movie){
+        return <MovieDetailComponent
+            movie={movie}
+            onUpdate={this.handleUpdate}
+            onDelete={this.handleDelete}
+            onComeBack={() => {this.setMovieListView()}}
+        />;
+    }
+    getAddMovieComponent(){
+        return <AddNewMovieComponent
+            onAdd={this.handleAddNewMovie}
+            onComeBack={() => {this.setMovieListView()}}
+        />;
+    }
+
+    getMovieForFlatList(list){
+        list.map(x => x.key = x.id);
+        return list;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     initializeData(){
         cinemas = this.getListOfCinemas();
@@ -168,147 +399,10 @@ export default class App extends Component<{}> {
         ];
     }
 
-    setCinemaListView(){
-        this.setState({element: this.getCinemasListElement(this.state.cinemas), curr_comp: "cinemaList"});
-    }
 
-    handleAddNewMovie(movie){
-        let tt = this;
-        AsyncStorage.getItem("id").then(v =>{
-            movie.id = parseInt(v);
-            newMovies = tt.state.movies.concat(movie);
-            AsyncStorage.setItem('movies',JSON.stringify(newMovies));
-            AsyncStorage.setItem('id', (parseInt(v) + 1) + "");
-            this.setState({
-                movies: newMovies,
-                element: this.getMovieListElement(newMovies)
-            });
-        });
-    }
 
-    handleUpdate(movie){
-        newMovies = this.state.movies;
-        newMovies[newMovies.findIndex(el => el.id === movie.id)] = movie;
-        AsyncStorage.setItem('movies',JSON.stringify(newMovies));
-        this.setState({movies: newMovies, element: this.getMovieListElement(newMovies)});
-    }
 
-    handleDelete(movieId){
-        newMovies = this.state.movies;
-        newMovies = newMovies.filter(x => x.id != movieId);
-        AsyncStorage.setItem('movies',JSON.stringify(newMovies));
-        this.setState({movies: newMovies, element: this.getMovieListElement(newMovies)});
-    }
 
-    setDetailView(movieId){
-        movie = this.state.movies.find(m => m.id === movieId);
-        newElement = this.getMovieDetailComponent(movie)
-        this.setState({element: newElement});
-    }
-
-    setCinemaDetailView(cinemaId){
-        cinema = this.state.cinemas.find(m => m.id === cinemaId);
-        newElement = this.getCinemaDetailComponent(cinema)
-        this.setState({element: newElement});
-    }
-
-    setMovieListView(){
-        this.setState({element: this.getMovieListElement(this.state.movies), curr_comp: "movieList"});
-    }
-
-    setCreateNewMovie(){
-        this.setState({element: this.getAddMovieComponent(), curr_comp: "createMovie"});
-    }
-
-    setCreateNewCinema(){
-
-    }
-
-    getMovieListElement(movies){
-        myMovies = this.getMovieForFlatList(movies);
-        return (<View style={styles.mainView}>
-            <FlatList
-                style={styles.listView}
-                data={myMovies}
-                renderItem={({item}) =>
-                    <TouchableHighlight onPress={() => {this.setDetailView(item.id)}} underlayColor="azure">
-                        <View style={styles.listItemView}>
-                            <Text style={styles.bigBlack}>
-                                {item.title + " " + item.date + "\n" + item.duration + " minutes"}
-                            </Text>
-                        </View>
-                    </TouchableHighlight>
-                }
-            />
-            <Button
-                title="Create New Movie"
-                onPress={() => {this.setCreateNewMovie()}}
-            />
-            <Button
-                title="Go to see cinemas"
-                onPress={() => {this.setCinemaListView()}}
-            />
-        </View>);
-    }
-
-    getCinemasListElement(cinemas){
-        myCinemas = this.getCinemaForFlatList(cinemas);
-        return (<View style={styles.mainView}>
-            <FlatList
-                style={styles.listView}
-                data={myCinemas}
-                renderItem={({item}) =>
-                    <TouchableHighlight onPress={() => {this.setCinemaDetailView(item.id)}} underlayColor="azure">
-                        <View style={styles.listItemView}>
-                            <Text style={styles.bigBlack}>
-                                {item.name + "\n" + item.adress + "\n" + item.phoneNumber}
-                            </Text>
-                        </View>
-                    </TouchableHighlight>
-                }
-            />
-            <Button
-                title="Create New Cinema"
-                onPress={() => {this.setCreateNewCinema()}}
-            />
-            <Button
-                title="Go to see movies"
-                onPress={() => {this.setMovieListView()}}
-            />
-        </View>);
-    }
-
-    getMovieDetailComponent(movie){
-        return <MovieDetailComponent
-            movie={movie}
-            onUpdate={this.handleUpdate}
-            onDelete={this.handleDelete}
-            onComeBack={() => {this.setMovieListView()}}
-        />;
-    }
-
-    getCinemaDetailComponent(cinema){
-        let assoc = this.state.associations;
-        assoc = assoc.filter(x => x.cinema_id == cinema.id);
-        return (<CinemaDetailComponent cinema={cinema} chartData={assoc} onComeBack={() => {this.setCinemaListView()}} />);
-    }
-
-    getAddMovieComponent(){
-        return <AddNewMovieComponent
-            onAdd={this.handleAddNewMovie}
-            onComeBack={() => {this.setMovieListView()}}
-        />;
-    }
-
-    getMovieForFlatList(list){
-        list.map(x => x.key = x.id);
-        return list;
-    }
-
-    getCinemaForFlatList(list){
-        list.map(x => x.key = x.id);
-        return list;
-    }
 
     render() {
         return this.state.movies === null ? null : (

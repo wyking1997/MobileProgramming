@@ -5,7 +5,7 @@ import firebase from 'react-native-firebase';
 export default class Login extends Component {
     constructor(props) {
         super(props);
-        this.email = 'langchristian96@gmail.com';
+        this.email = 't@test.gmail';
         this.password = 'testtest';
     }
 
@@ -32,7 +32,6 @@ export default class Login extends Component {
                     onPress={() => {
                         firebase.auth().signInWithEmailAndPassword(this.email, this.password)
                             .then(function () {
-                                alert("Welcome " + firebase.auth().currentUser.email + "!");
                                 loginfct(firebase.auth().currentUser.email);
                             }).catch(function (error) {
                             alert(error.code);
