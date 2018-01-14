@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "945843656203",
+    "firebase_url": "https://testcinemas-45629.firebaseio.com",
+    "project_id": "testcinemas-45629",
+    "storage_bucket": "testcinemas-45629.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945843656203:android:4d22df97cac45eaa",
+        "android_client_info": {
+          "package_name": "com.cinemareact"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945843656203-926l4f2iaal55c76vlgesbv35i9o91e0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8THQuAq8oiKcq4n0FP7TbwLZwy9YbgH8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

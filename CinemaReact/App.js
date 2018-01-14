@@ -17,6 +17,8 @@ import {
 import MovieDetailComponent from "./MovieDetailComponent";
 import AddNewMovieComponent from "./AddNewMovieComponent";
 import CinemaDetailComponent from "./CinemaDetailComponent";
+import LoginComponent from "./LoginComponent";
+import firebase from 'react-native-firebase';
 
 // react-native run-android
 // ctrl + M while in the app in simulator for debugg
@@ -28,6 +30,11 @@ export default class App extends Component<{}> {
 
     constructor(props){
         super(props);
+
+        // cinemaList
+        // login
+        // movieList
+        // createMovie
 
         this.setDetailView = this.setDetailView.bind(this);
         this.getMovieListElement = this.getMovieListElement.bind(this);
@@ -46,11 +53,14 @@ export default class App extends Component<{}> {
         this.getListOfCinemasHardCode = this.getListOfCinemasHardCode.bind(this);
         this.getListOfFilmsHardCode = this.getListOfFilmsHardCode.bind(this);
         this.getAssociationsHardCode = this.getAssociationsHardCode.bind(this);
+        this.getLoginComponent = this.getLoginComponent.bind(this);
+        this.loginSuccess = this.loginSuccess.bind(this);
 
         // this.initializeData();
 
-        element = this.getMovieListElement([]);
-        this.state = {movies: [], cinemas: [], associations: [], element: element};
+        // element = this.getMovieListElement([]);
+        element = this.getLoginComponent();
+        this.state = {movies: [], cinemas: [], associations: [], element: element, curr_comp: "login"};
 
         const secondThis = this;
         AsyncStorage.getItem('associations').then(x => {
@@ -63,7 +73,9 @@ export default class App extends Component<{}> {
                 let cinemas = JSON.stringify(secondThis.getListOfCinemas());
                 AsyncStorage.setItem('cinemas', cinemas);
                 AsyncStorage.setItem('idCinema', '3');
-                secondThis.setState({cinemas: this.getListOfCinemas()});
+                // secondThis.setState({cinemas: this.getListOfCinemas()});
+            } else if (this.state.curr_comp == "cinemaList") {
+                secondThis.setState({cinemas: JSON.parse(x), element: secondThis.getCinemasListElement(JSON.parse(x))});
             } else
                 secondThis.setState({cinemas: JSON.parse(x)});
         });
@@ -72,9 +84,28 @@ export default class App extends Component<{}> {
                 AsyncStorage.setItem('movies', JSON.stringify([]));
                 AsyncStorage.setItem('id', '0');
                 secondThis.setState({movies: JSON.parse(x), element: secondThis.getMovieListElement(JSON.parse(x))});
-            } else
+            } else if (this.state.curr_comp == "movieList")
                 secondThis.setState({movies: JSON.parse(x), element: secondThis.getMovieListElement(JSON.parse(x))});
+            else
+                secondThis.setState({movies: JSON.parse(x)})
         });
+    }
+
+    getLoginComponent(){
+        return <LoginComponent login={this.loginSuccess}/>;
+    }
+
+    loginSuccess(email){
+        Alert.alert(
+            'Loggeg in user',
+            email,
+            [
+                {text: 'Revoke', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'OK', onPress: () => console.log('ok Pressed')},
+            ],
+            { cancelable: false }
+        )
+        this.setCinemaListView();
     }
 
     initializeData(){
@@ -138,7 +169,7 @@ export default class App extends Component<{}> {
     }
 
     setCinemaListView(){
-        this.setState({element: this.getCinemasListElement(this.state.cinemas)});
+        this.setState({element: this.getCinemasListElement(this.state.cinemas), curr_comp: "cinemaList"});
     }
 
     handleAddNewMovie(movie){
@@ -182,11 +213,11 @@ export default class App extends Component<{}> {
     }
 
     setMovieListView(){
-        this.setState({element: this.getMovieListElement(this.state.movies)})
+        this.setState({element: this.getMovieListElement(this.state.movies), curr_comp: "movieList"});
     }
 
     setCreateNewMovie(){
-        this.setState({element: this.getAddMovieComponent()});
+        this.setState({element: this.getAddMovieComponent(), curr_comp: "createMovie"});
     }
 
     setCreateNewCinema(){
