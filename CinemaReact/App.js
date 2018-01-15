@@ -58,6 +58,11 @@ export default class App extends Component<{}> {
         this.loginSuccess = this.loginSuccess.bind(this);
         this.getCinemasListElementForNonAdminUser = this.getCinemasListElementForNonAdminUser.bind(this);
 
+
+        this.populateFirebase = this.populateFirebase.bind(this);
+        this.addAssocToFire = this.addAssocToFire.bind(this);
+        this.populateFirebase();
+
         // this.initializeData();
 
         // element = this.getMovieListElement([]);
@@ -125,6 +130,32 @@ export default class App extends Component<{}> {
 
 
 
+
+
+
+
+
+    populateFirebase(){
+        cinemaKeys = ["-L2qohiY1iC8moySn5bH", "-L2qohiY1iC8moySn5bI", "-L2qohiZX35RHO0CdxAB", "-L2qohiZX35RHO0CdxAC"];
+        movieKeys = ["-L2qT3etrSRy4Ewz9O5C", "-L2qVenTBvQmS7dNSgPe", "-L2qVmR2d3W6TD2rKAcA",
+            "-L2qWmufbbWpSrXIKtEC", "-L2rBc6BgTeo0oB37kc2", "-L2rBchcEXY3mLSHqx9M", "-L2rBdMc9NWZ508vJB6C",
+            "-L2rBeX4xIiS-UjvZS1Z", "-L2rBfSAszHE-eT6hF4H", "-L2rBwYKacm8a0lvvSwU"
+        ];
+        dates = ["2018-01-12", "2018-01-13", "2018-01-14", "2018-01-15", "2018-01-16", "2018-01-17"];
+
+        // for (i=0; i < 500; i++){
+        //     cin=Math.floor((Math.random() * cinemaKeys.length));mov=Math.floor((Math.random() * movieKeys.length));dt=Math.floor((Math.random() * dates.length));this.addAssocToFire(cinemaKeys[cin], movieKeys[mov], dates[dt]);
+        // }
+    }
+    addAssocToFire(cinemaKey, movieKey, date){
+        let key = firebase.database().ref().child('associations').push().key;
+        firebase.database().ref('associations').child(key).update({
+            key: key,
+            cinemaKey: cinemaKey,
+            movieKey: movieKey,
+            date: date
+        });
+    }
 
 
 
@@ -212,7 +243,7 @@ export default class App extends Component<{}> {
     }
     getCinemaDetailComponent(cinema){
         let assoc = this.state.associations;
-        assoc = assoc.filter(x => x.cinema_key == cinema.key);
+        assoc = assoc.filter(x => x.cinemaKey == cinema.key);
         return (<CinemaDetailComponent cinema={cinema} chartData={assoc} onComeBack={() => {this.setCinemaListView()}} />);
     }
     getCinemasListElement(cinemas){

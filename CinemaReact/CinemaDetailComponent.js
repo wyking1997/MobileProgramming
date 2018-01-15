@@ -8,9 +8,7 @@ export default class CinemaDetailComponent extends Component<{}>{
         super(props);
 
         this.computeChartInput = this.computeChartInput.bind(this);
-        this.loadChartOptions = this.loadChartOptions.bind(this);
-
-        this.loadChartOptions();
+        
         const chartData = this.computeChartInput(this.props.chartData);
 
         this.state = {
@@ -34,79 +32,33 @@ export default class CinemaDetailComponent extends Component<{}>{
         return a;
     }
 
-    loadChartOptions(){
-        this.options = {
-            width: 300,
-            height: 300,
-            margin: {
-                top: 20,
-                left: 25,
-                bottom: 50,
-                right: 20
-            },
-            color: '#2980B9',
-            gutter: 20,
-            animate: {
-                type: 'oneByOne',
-                duration: 200,
-                fillTransition: 3
-            },
-            axisX: {
-                showAxis: true,
-                showLines: true,
-                showLabels: true,
-                showTicks: true,
-                zeroAxis: false,
-                orient: 'bottom',
-                label: {
-                    fontFamily: 'Arial',
-                    fontSize: 8,
-                    fontWeight: true,
-                    fill: '#34495E'
-                }
-            },
-            axisY: {
-                showAxis: true,
-                showLines: true,
-                showLabels: true,
-                showTicks: true,
-                zeroAxis: false,
-                orient: 'left',
-                label: {
-                    fontFamily: 'Arial',
-                    fontSize: 8,
-                    fontWeight: true,
-                    fill: '#34495E'
-                }
-            }
-        }
-    }
 
     render(){
-        let data = [
-            [{
-                "v": 49,
-                "name": "apple"
-            }, {
-                "v": 42,
-                "name": "apple"
-            }],
-            [{
-                "v": 69,
-                "name": "banana"
-            }, {
-                "v": 62,
-                "name": "banana"
-            }],
-            [{
-                "v": 29,
-                "name": "grape"
-            }, {
-                "v": 15,
-                "name": "grape"
-            }]
-        ]
+        // let data = [
+        //     [{
+        //         "v": 49,
+        //         "name": "apple"
+        //     }, {
+        //         "v": 42,
+        //         "name": "apple"
+        //     }],
+        //     [{
+        //         "v": 69,
+        //         "name": "banana"
+        //     }, {
+        //         "v": 62,
+        //         "name": "banana"
+        //     }],
+        //     [{
+        //         "v": 29,
+        //         "name": "grape"
+        //     }, {
+        //         "v": 15,
+        //         "name": "grape"
+        //     }]
+        // ]
 
+        let data = this.state.chartData;
         let options = {
             width: 300,
             height: 300,
