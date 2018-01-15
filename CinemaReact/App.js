@@ -89,6 +89,9 @@ export default class App extends Component<{}> {
             for(var propt in x) ls.push(x[propt]);
             secondThis.setState({associations: ls});
         });
+        firebase.messaging().onMessage(function(payload) {
+            alert("Message received: " + payload.fcm.body);
+        })
 
 
         // const secondThis = this;
@@ -175,7 +178,7 @@ export default class App extends Component<{}> {
                     <TouchableHighlight onPress={() => {this.setCinemaDetailForNormalUser(item.key)}} underlayColor="azure">
                         <View style={styles.listItemView}>
                             <Text style={styles.bigBlack}>
-                                {item.name + "\n" + item.adress + "\n" + item.phoneNumber}
+                                {item.name + "\n" + item.address + "\n" + item.phoneNumber}
                             </Text>
                         </View>
                     </TouchableHighlight>
@@ -222,7 +225,7 @@ export default class App extends Component<{}> {
                     <TouchableHighlight onPress={() => {this.setCinemaDetailView(item.key)}} underlayColor="azure">
                         <View style={styles.listItemView}>
                             <Text style={styles.bigBlack}>
-                                {item.name + "\n" + item.adress + "\n" + item.phoneNumber}
+                                {item.name + "\n" + item.address + "\n" + item.phoneNumber}
                             </Text>
                         </View>
                     </TouchableHighlight>
@@ -278,6 +281,8 @@ export default class App extends Component<{}> {
         newMovies = tt.state.movies.concat(movie);
         this.setState({
             movies: newMovies,
+
+
             element: this.getMovieListElement(newMovies)
         });
         // AsyncStorage.getItem("id").then(v =>{
